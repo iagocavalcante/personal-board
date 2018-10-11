@@ -1,22 +1,25 @@
 <template>
   <div class="box">
     <div>
-      <label for="Entre com o nome de seu usuário">Entre com o nome de seu usuário</label>
-      <input class="username-input" type="text" name="username" id="username" v-model="username">
-      <button class="btn btn-primary">Salvar</button>
+      <label for="Entre com o nome de seu usuário">{{ $t("username-label") }}</label>
+      <input class="username-input" type="text" name="username" id="username" :placeholder="$t('username-placeholder')" v-model="username">
+      <button @click="save()" class="btn btn-primary btn-md">{{ $t("button-save") }}</button>
     </div>
   </div>
 </template>
 
 <script>
+import { mapActions } from 'vuex'
 export default {
   name: 'Welcome',
   data: () => ({
     username: ''
   }),
   methods: {
+    ...mapActions('Global', ['saveUser']),
     save () {
-
+      this.saveUser(this.username)
+      this.$router.push('dashboard')
     }
   }
 }
@@ -26,6 +29,7 @@ export default {
 <style scoped>
 
 .box {
+  text-align: center;
   margin-top: 60px;
   display: flex;
   align-items: center;

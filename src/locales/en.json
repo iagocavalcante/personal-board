@@ -1,3 +1,7 @@
 {
-  "message": "hello i18n !!"
+  "button-save": "Save",
+  "message": "hello i18n !!",
+  "username-label": "Enter with your username or leave blank",
+  "username-placeholder": "AnonyDog",
+  "welcome-user": "Welcome,"
 }
