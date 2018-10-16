@@ -1,11 +1,15 @@
 <template>
-  <div class="box">
-    <div>
-      <label for="Entre com o nome de seu usuário">{{ $t("username-label") }}</label>
-      <input class="username-input" type="text" name="username" id="username" :placeholder="$t('username-placeholder')" v-model="username">
-      <button @click="save()" class="btn btn-primary btn-md">{{ $t("button-save") }}</button>
-    </div>
-  </div>
+  <vs-row>
+    <vs-col vs-offset="2" vs-type="flex" vs-justify="center" vs-align="center" vs-w="8">
+      <div class="box">
+        <div>
+          <label :for="$t('username-label')">{{ $t("username-label") }}</label>
+          <vs-input vs-icon-after="true" color="success" vs-size="large" vs-icon="person" :vs-placeholder="$t('username-placeholder')" v-model="username"/>
+          <vs-button vs-size="large" vs-line-origin="left" vs-type="relief" color="success" @click="save()">{{ $t("button-save") }}</vs-button>
+        </div>
+      </div>
+    </vs-col>
+  </vs-row>
 </template>
 
 <script>
@@ -27,8 +31,8 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-
 .box {
+
   text-align: center;
   margin-top: 60px;
   display: flex;
@@ -38,16 +42,16 @@ export default {
 
 .box div {
   vertical-align: middle;
-  width: 270px;
+  width: 290px;
   height: 45px;
 }
 
-.username-input {
-  width: 270px;
-  height: 25px;
-  background-color: azure;
-  border: .5px solid grey;
-  border-radius: 3px;
-  margin-top: 10px;
+.vs-input {
+  margin-top: 20px;
 }
+
+.vs-button {
+  margin-top: 20px;
+}
+
 </style>

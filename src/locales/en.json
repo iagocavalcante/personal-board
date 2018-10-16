@@ -1,7 +1,11 @@
 {
   "button-save": "Save",
-  "message": "hello i18n !!",
   "username-label": "Enter with your username or leave blank",
   "username-placeholder": "AnonyDog",
-  "welcome-user": "Welcome,"
+  "welcome-user": "Welcome,",
+  "create": "Create",
+  "cancel": "Cancel",
+  "dialog-invalid": "Fields can not be empty please enter the data",
+  "board-name-placeholder": "Enter with board name",
+  "board-description-placeholder": "Enter with board description"
 }

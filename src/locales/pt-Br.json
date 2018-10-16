@@ -1,7 +1,11 @@
 {
   "button-save": "Salvar",
-  "message": "hello i18n !!",
   "username-label": "Entre com seu nome de usuário ou deixe em branco",
   "username-placeholder": "AnonyDog",
-  "welcome-user": "Seja bem-vindo,"
+  "welcome-user": "Seja bem-vindo,",
+  "create": "Criar",
+  "cancel": "Cancelar",
+  "dialog-invalid": "Os campos não podem ser vázios, entre com dados",
+  "board-name-placeholder": "Digite o nome do quadro",
+  "board-description-placeholder": "Digite a descrição do quadro"
 }
