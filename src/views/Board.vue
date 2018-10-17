@@ -14,7 +14,7 @@
           <draggable v-model="list.tasks">
             <vs-list-item :title="task.title" :subtitle="task.description" :key="index" v-for="(task, index) in list.tasks">
             </vs-list-item>
-          </draggable>
+          </draggable> 
         </vs-list>
       </vs-col>
     </draggable>
