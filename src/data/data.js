@@ -3,10 +3,10 @@ export default {
   boards: window.localStorage.getItem('boards') ? JSON.parse(window.localStorage.getItem('boards')) : [
     {
       id: 1,
-      name: 'First Board',
+      title: 'First Board',
       description: 'First board test',
-      'starred': true,
-      cards: [
+      starred: true,
+      lists: [
         {
           id: 1,
           title: 'TO DO',
@@ -27,10 +27,10 @@ export default {
     },
     {
       id: 2,
-      name: 'Second Board',
+      title: 'Second Board',
       description: 'Second board test',
-      'starred': true,
-      cards: [
+      starred: true,
+      lists: [
         {
           id: 1,
           title: 'TO DO',

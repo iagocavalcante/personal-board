@@ -3,28 +3,28 @@
     <vs-col vs-type="flex" vs-align="center" vs-justify="center" vs-w="12">
       <vs-col vs-type="flex" vs-justify="flex-start" vs-align="center" vs-w="6">
         <vs-avatar class="ml-10" size="large" src="https://avatars2.githubusercontent.com/u/31676496?s=460&v=4"/>
-        <h1 class="ml-10">{{ $t('welcome-user')}} {{ this.data.username }}</h1>
+        <h1 class="ml-10">{{ $t('welcome-user')}} {{ username }}</h1>
       </vs-col>
       <vs-col vs-type="flex" vs-justify="space-between" vs-align="center" vs-w="6">
         <vs-col vs-type="flex" vs-align="flex-end" vs-w="2"></vs-col>
         <vs-col vs-type="flex" vs-align="flex-end" vs-w="2"></vs-col>
         <vs-col vs-type="flex" vs-justify="center" vs-align="flex-end" vs-w="2">
-          <vs-button style="border-radius: 50%" color="success" vs-type="relief" @click.prevent="openAlert" vs-icon="add"></vs-button>
+          <vs-button style="border-radius: 50%" color="success" vs-type="relief" @click.prevent="isActive = true" vs-icon="add"></vs-button>
         </vs-col>
       </vs-col>
     </vs-col>
     <vs-divider position="center">
-      My Boards
+      {{$t('my-board')}}
     </vs-divider>
-    <vs-col vs-type="flex" vs-justify="flex-start" vs-align="center" vs-w="12">
-      <vs-col :key="board.id" v-for="board in data.boards" vs-type="flex" vs-w="3">
+    <draggable class="vs-row" v-model="boards" style="justify-content: flex-start; display: flex; width: 100%;">
+      <vs-col vs-type="flex" vs-justify="flex-start" vs-align="flex-start" vs-w="3" :key="board.id" v-for="board in boards">
         <vs-card actionable>
-          <div slot="header">
+          <div slot="header" @click="goToBoard(board)">
             <vs-row vs-justify="center">
               <vs-col vs-type="flex" vs-w="12">
                 <vs-col vs-type="flex" vs-w="6">
                   <h3>
-                    {{board.name}}
+                    {{board.title}}
                   </h3>
                 </vs-col>
                 <vs-col vs-type="flex" vs-justify="flex-end" vs-align="flex-end" vs-w="6">
@@ -38,39 +38,103 @@
           </div>
           <div slot="footer">
             <vs-row vs-justify="flex-end">
-              <vs-button class="ml-5" vs-type="filled" color="danger" vs-icon="delete"></vs-button>
-              <vs-button class="ml-5" color="primary" vs-icon="edit"></vs-button>
+              <vs-button class="ml-5" vs-type="relief" color="danger" vs-icon="delete" @click.prevent="deleteBoard({id: board.id})"></vs-button>
+              <vs-button class="ml-5" vs-type="relief" color="primary" vs-icon="edit" @click.prevent="openBoard(board)"></vs-button>
             </vs-row>
           </div>
         </vs-card>
       </vs-col>
-    </vs-col>
-    <pb-dialog
-      :placeholderTitle="$t('board-name-placeholder')"
-      :placeholderText="$t('board-description-placeholder')"
-      :isActive="isActive"
-    >
-    </pb-dialog>
+    </draggable>
+    <vs-prompt
+      @vs-cancel="clearDialog"
+      @vs-accept="chooseAction"
+      :vs-title="!isBoardSelected ? 'New Board' : 'Edit Board'"
+      :vs-is-valid="validField"
+      :vs-accept-text="!isBoardSelected ? $t('create') : $t('edit')"
+      :vs-cancel-text="$t('cancel')"
+      :vs-active.sync="isActive"
+      :color="'success'"
+      class="con-vs-dialog">
+        <div class="con-exemple-prompt">
+        Enter your board name and board description to <b>continue</b>.
+          <vs-input :placeholder="$t('board-name-placeholder')" v-model="title"/>
+          <vs-textarea :label="$t('board-description-placeholder')" v-model="description" />
+
+          <vs-alert :vs-active="!validField" color="danger" vs-icon="new_releases" >
+            {{$t('dialog-invalid')}}
+          </vs-alert>
+        </div>
+    </vs-prompt>
   </vs-row>
 </template>
 
 <script>
 import { mapState, mapActions } from 'vuex'
-import PbDialog from '@/components/PBDialog'
+import draggable from 'vuedraggable'
+
 export default {
   name: 'Dashboard',
   components: {
-    PbDialog
+    draggable
   },
   computed: {
-    ...mapState('Global', ['data'])
+    ...mapState('Global', ['username', 'boards']),
+    validField () {
+      return (this.title.length > 0 && this.description.length > 0)
+    }
   },
   data: () => ({
-    isActive: false
+    isActive: false,
+    title: '',
+    description: '',
+    isBoardSelected: false,
+    boardSelected: {}
   }),
   methods:{
-    openAlert(){
+    ...mapActions('Global', ['createBoard', 'deleteBoard', 'editBoard']),
+    create () {
+      const payload = {
+        title: this.title,
+        description: this.description
+      }
+      this.createBoard(payload)
+    },
+    clearDialog(){
+      this.title = ''
+      this.description = ''
+      this.isBoardSelected = false
+    },
+    openBoard ( board ) {
+      this.isBoardSelected = true
+      this.boardSelected = board
       this.isActive = true
+      this.title = board.title
+      this.description = board.description
+      
+    },
+    edit ( board ) {
+      const payload = {
+        id: board.id,
+        title: this.title,
+        description: this.description,
+        starred: board.starred,
+        tasks: board.tasks,
+        cards: board.cards
+      }
+      this.editBoard(payload)
+    },
+    goToBoard ( board ) {
+      this.$router.push({ name: 'board', params: { board: board}})
+    },
+    chooseAction () {
+      if ( !this.isBoardSelected ) this.create()
+      else this.edit(this.boardSelected)
+      this.$vs.notify({
+        color:'primary',
+        title: !this.isBoardSelected ? 'New Board Created' : 'Board edited',
+        text: `Board title: ${this.title}`
+      })
+      this.clearDialog()
     }
   }
 }
@@ -87,6 +151,21 @@ export default {
 
 .ml-5 {
   margin-left: 5px;
+}
+
+.con-exemple-prompt {
+  padding: 10px;
+  padding-bottom: 0;
+}
+
+.con-exemple-prompt .vs-input {
+  width: 100%;
+  margin-top: 10px;
+}
+
+.vs-con-textarea {
+  width: 100%;
+  margin-top: 10px;
 }
 </style>
 

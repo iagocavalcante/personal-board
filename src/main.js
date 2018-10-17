@@ -12,6 +12,12 @@ Vue.use(Vuesax)
 
 Vue.config.productionTip = false
 
+router.beforeEach((to, from, next) => {
+  let requiresAuth = to.matched.some(record => record.meta.requiresAuth)
+  if (requiresAuth && !window.localStorage.username) next('/')
+  else next()
+})
+
 new Vue({
   router,
   i18n,

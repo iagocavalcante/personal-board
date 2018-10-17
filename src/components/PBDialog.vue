@@ -1,13 +1,13 @@
 <template>
   <vs-prompt
-    @vs-cancel="title='',description=''"
+    @vs-cancel="canceltAlert"
     @vs-accept="acceptAlert"
     :vs-title="isBoard ? 'New Board' : 'New Card'"
     :vs-is-valid="validField"
     :vs-accept-text="$t('create')"
     :vs-cancel-text="$t('cancel')"
-    :vs-active.sync="isActivePrompt"
-    color="success"
+    :vs-active.sync="activePrompt"
+    color="danger"
     class="con-vs-dialog">
       <div class="con-exemple-prompt">
       Enter your {{ isBoard ? 'board' : 'card'}} name and {{ isBoard ? 'board' : 'card'}} description to <b>continue</b>.
@@ -22,6 +22,7 @@
 </template>
 
 <script>
+import { mapState, mapActions } from 'vuex'
 export default {
   props: {
     placeholderTitle: {
@@ -35,44 +36,31 @@ export default {
     isBoard: {
       type: Boolean,
       default: true
-    },
-    isActive: {
-      type: Boolean,
-      default: false
     }
   },
   data: () => ({
     title: '',
-    description: '',
-    activePrompt: false
+    description: ''
   }),
   computed: {
     validField () {
       return (this.title.length > 0 && this.description.length > 0)
     },
-    isActivePrompt: {
-      set: function () {
-        return this.activePrompt = !this.activePrompt
-      },
-      get: function () {
-        return this.activePrompt = this.isActive
-      }
-    }
-  },
-  mounted () {
-    this.$on('update:vsActive', this.setActive) 
-    console.log(this.$parent)
+    ...mapState('Global', ['activePrompt'])
   },
   methods:{
-    setActive () {
-      this.isActivePrompt = false
-    },
+    ...mapActions('Global', ['closeDialog']),
     acceptAlert(){
       this.$vs.notify({
         color:'success',
         title: this.title,
         text: this.description
       })
+    },
+    canceltAlert(){
+      this.title = ''
+      this.description = ''
+      this.closeDialog()
     }
   }
 }
