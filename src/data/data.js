@@ -12,14 +12,14 @@ export default {
           title: 'TO DO',
           tasks: [
             {
+              id: 1,
               title: 'GO ROCK',
-              description: 'It\'s just an example',
-              placeholder: false
+              description: 'It\'s just an example'
             },
             {
+              id: 2,
               title: 'GO ROCK 1',
-              description: 'It\'s just an example 1',
-              placeholder: false
+              description: 'It\'s just an example 1'
             }
           ]
         }
@@ -36,14 +36,14 @@ export default {
           title: 'TO DO',
           tasks: [
             {
+              id: 1,
               title: 'GO ROCK',
-              description: 'It\'s just an example',
-              placeholder: false
+              description: 'It\'s just an example'
             },
             {
+              id: 2,
               title: 'GO ROCK 1',
-              description: 'It\'s just an example 1',
-              placeholder: false
+              description: 'It\'s just an example 1'
             }
           ]
         }

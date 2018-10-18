@@ -16,8 +16,8 @@
     <vs-divider position="center">
       {{$t('my-board')}}
     </vs-divider>
-    <draggable class="vs-row" v-model="copyBoards" style="justify-content: flex-start; display: flex; width: 100%;">
-      <vs-col vs-type="flex" vs-justify="flex-start" vs-align="flex-start" vs-w="3" :key="board.id" v-for="board in copyBoards">
+    <draggable class="vs-row" v-model="reactiveBoard" style="justify-content: flex-start; display: flex; width: 100%;">
+      <vs-col vs-type="flex" vs-justify="flex-start" vs-align="flex-start" vs-w="3" :key="board.id" v-for="board in reactiveBoard">
         <vs-card actionable>
           <div slot="header" @click="goToBoard(board)">
             <vs-row vs-justify="center">
@@ -81,6 +81,15 @@ export default {
     ...mapState('Global', ['username', 'boards']),
     validField () {
       return (this.title.length > 0 && this.description.length > 0)
+    },
+    reactiveBoard: {
+      set (value) {
+        this.tempBoard = [...value]
+        this.saveBoards(this.tempBoard)
+      },
+      get () {
+        return this.tempBoard
+      }
     }
   },
   data: () => ({
@@ -89,13 +98,13 @@ export default {
     description: '',
     isBoardSelected: false,
     boardSelected: {},
-    copyBoards: []
+    tempBoard: []
   }),
   mounted() {
-    this.copyBoards = [...this.boards]
+    this.tempBoard = [...this.boards]
   },
   methods:{
-    ...mapActions('Global', ['createBoard', 'deleteBoard', 'editBoard']),
+    ...mapActions('Global', ['createBoard', 'deleteBoard', 'editBoard', 'saveBoards']),
     create () {
       const payload = {
         title: this.title,
@@ -132,7 +141,7 @@ export default {
         id: id
       }
       this.deleteBoard(payload)
-      this.copyBoards = [...this.boards]
+      this.reactiveBoard = [...this.boards]
     },
     goToBoard ( board ) {
       this.$router.push({ name: 'board', params: { board: board}})
@@ -145,7 +154,7 @@ export default {
         title: !this.isBoardSelected ? 'New Board Created' : 'Board edited',
         text: `Board title: ${this.title}`
       })
-      this.copyBoards = [...this.boards]
+      this.reactiveBoard = [...this.boards]
       this.clearDialog()
     }
   }
