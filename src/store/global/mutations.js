@@ -80,7 +80,7 @@ const SAVE_BOARDS = ( state, payload ) => {
 }
 
 const SAVE_TASKS = ( state, payload ) => {
-  state.boards.find(board => board.id === payload.boardId).lists.find(list => list.id === payload.listId).tasks.concat(payload.tasks)
+  state.boards.find(board => board.id === payload.boardId).lists.find(list => list.id === payload.list.id).tasks.concat(payload.list.tasks)
   saveBoardsLocal( state.boards )
 }
 
