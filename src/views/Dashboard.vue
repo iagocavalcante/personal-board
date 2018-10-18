@@ -16,8 +16,8 @@
     <vs-divider position="center">
       {{$t('my-board')}}
     </vs-divider>
-    <draggable class="vs-row" v-model="boards" style="justify-content: flex-start; display: flex; width: 100%;">
-      <vs-col vs-type="flex" vs-justify="flex-start" vs-align="flex-start" vs-w="3" :key="board.id" v-for="board in boards">
+    <draggable class="vs-row" v-model="copyBoards" style="justify-content: flex-start; display: flex; width: 100%;">
+      <vs-col vs-type="flex" vs-justify="flex-start" vs-align="flex-start" vs-w="3" :key="board.id" v-for="board in copyBoards">
         <vs-card actionable>
           <div slot="header" @click="goToBoard(board)">
             <vs-row vs-justify="center">
@@ -38,7 +38,7 @@
           </div>
           <div slot="footer">
             <vs-row vs-justify="flex-end">
-              <vs-button class="ml-5" vs-type="relief" color="danger" vs-icon="delete" @click.prevent="deleteBoard({id: board.id})"></vs-button>
+              <vs-button class="ml-5" vs-type="relief" color="danger" vs-icon="delete" @click.prevent="exclude(board.id)"></vs-button>
               <vs-button class="ml-5" vs-type="relief" color="primary" vs-icon="edit" @click.prevent="openBoard(board)"></vs-button>
             </vs-row>
           </div>
@@ -56,7 +56,7 @@
       :color="'success'"
       class="con-vs-dialog">
         <div class="con-exemple-prompt">
-        Enter your board name and board description to <b>continue</b>.
+        <span v-html="$t('board-dialog')"></span>
           <vs-input :placeholder="$t('board-name-placeholder')" v-model="title"/>
           <vs-textarea :label="$t('board-description-placeholder')" v-model="description" />
 
@@ -88,8 +88,12 @@ export default {
     title: '',
     description: '',
     isBoardSelected: false,
-    boardSelected: {}
+    boardSelected: {},
+    copyBoards: []
   }),
+  mounted() {
+    this.copyBoards = [...this.boards]
+  },
   methods:{
     ...mapActions('Global', ['createBoard', 'deleteBoard', 'editBoard']),
     create () {
@@ -123,6 +127,13 @@ export default {
       }
       this.editBoard(payload)
     },
+    exclude ( id ) {
+      const payload = {
+        id: id
+      }
+      this.deleteBoard(payload)
+      this.copyBoards = [...this.boards]
+    },
     goToBoard ( board ) {
       this.$router.push({ name: 'board', params: { board: board}})
     },
@@ -134,6 +145,7 @@ export default {
         title: !this.isBoardSelected ? 'New Board Created' : 'Board edited',
         text: `Board title: ${this.title}`
       })
+      this.copyBoards = [...this.boards]
       this.clearDialog()
     }
   }
