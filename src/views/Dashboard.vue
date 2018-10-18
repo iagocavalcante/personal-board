@@ -131,8 +131,7 @@ export default {
         title: this.title,
         description: this.description,
         starred: board.starred,
-        tasks: board.tasks,
-        cards: board.cards
+        lists: board.lists
       }
       this.editBoard(payload)
     },
