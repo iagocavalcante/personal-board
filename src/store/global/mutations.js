@@ -28,7 +28,7 @@ const CREATE_LIST = ( state, payload ) => {
   delete payload.board
   const payloadWithId = Object.assign({}, payload, {
     id: uuidv4(),
-    tasks: [],
+    lists: [],
   })
   state.boards.find(board => board.id === boardId).lists.push(payloadWithId)
   saveBoardsLocal( state.boards )
@@ -74,7 +74,6 @@ const SAVE_LISTS = ( state, payload ) => {
 }
 
 const SAVE_BOARDS = ( state, payload ) => {
-  console.log("AQUI DEVERIA SER O PAYLOAD => ", payload)
   state.boards = []
   state.boards = state.boards.concat(payload)
   saveBoardsLocal( state.boards )

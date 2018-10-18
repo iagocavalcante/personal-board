@@ -119,7 +119,7 @@ export default {
     },
     openBoard ( board ) {
       this.isBoardSelected = true
-      this.boardSelected = board
+      this.boardSelected = {...board}
       this.isActive = true
       this.title = board.title
       this.description = board.description
