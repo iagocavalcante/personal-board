@@ -19,6 +19,7 @@ router.beforeEach((to, from, next) => {
 })
 
 new Vue({
+  mode: 'history',
   router,
   i18n,
   store,
