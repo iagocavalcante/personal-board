@@ -28,7 +28,7 @@ const CREATE_LIST = ( state, payload ) => {
   delete payload.board
   const payloadWithId = Object.assign({}, payload, {
     id: uuidv4(),
-    lists: [],
+    tasks: [],
   })
   state.boards.find(board => board.id === boardId).lists.push(payloadWithId)
   saveBoardsLocal( state.boards )
