@@ -63,9 +63,10 @@
   <script>
     let refreshing
     document.getElementById('reload').addEventListener('click', function(){
-      if (refreshing) return
-      window.location.reload(true)
-      refreshing = true
+      caches.keys().then(keys => {
+        keys.forEach(key => caches.delete(key))
+        window.location.reload(true)
+      })
     })
   </script>
 </html>
