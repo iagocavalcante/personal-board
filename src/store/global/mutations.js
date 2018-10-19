@@ -58,7 +58,11 @@ const CREATE_TASK = ( state, payload ) => {
 }
 
 const DELETE_TASK = ( state, payload ) => {
-  state.boards = state.boards.filter(board => board.id !== payload.id)
+  state.boards.find(board => board.id === payload.boardId)
+    .lists.find(list => list.id === payload.listId)
+    .tasks = state.boards.find(board => board.id === payload.boardId)
+    .lists.find(list => list.id === payload.listId)
+    .tasks.filter(task => task.id !== payload.task.id)
   saveBoardsLocal( state.boards )
 }
 
@@ -70,6 +74,7 @@ const EDIT_TASK = ( state, payload ) => {
 
 const SAVE_LISTS = ( state, payload ) => {
   state.boards.find(board => board.id === payload.id).lists.concat(payload.lists)
+  window.localStorage.setItem('boardSelected', JSON.stringify(state.boards.filter(board => board.id === payload.id)[0]))
   saveBoardsLocal( state.boards )
 }
 
@@ -81,6 +86,8 @@ const SAVE_BOARDS = ( state, payload ) => {
 
 const SAVE_TASKS = ( state, payload ) => {
   state.boards.find(board => board.id === payload.boardId).lists.find(list => list.id === payload.list.id).tasks.concat(payload.list.tasks)
+  const boardSelected = state.boards.filter(board => board.id === payload.boardId)[0]
+  window.localStorage.setItem('boardSelected', JSON.stringify(boardSelected))
   saveBoardsLocal( state.boards )
 }
 

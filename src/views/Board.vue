@@ -2,7 +2,7 @@
   <vs-row vs-justify="center">
     <vs-col vs-type="flex" vs-align="center" vs-justify="center" vs-w="12">
       <vs-avatar class="ml-10" size="large" src="https://avatars2.githubusercontent.com/u/31676496?s=460&v=4"/>
-      <h1 class="ml-10">{{ board.title }}</h1>
+      <h1 class="ml-10">{{ boardPassed.title }}</h1>
     </vs-col>
     <vs-divider position="center">
       {{$t('my-tasks')}}
@@ -14,28 +14,17 @@
     </vs-row>
     <draggable class="vs-row" style="justify-content: flex-start; display: flex; width: 100%;" v-model="lists" >
       <vs-col vs-type="flex" vs-justify="center" vs-align="flex-start" vs-w="3" :key="list.id" v-for="list in lists">
-        <pb-lists :listHeader="list.title" :list="list" :boardId="board.id">
+        <pb-lists :listHeader="list.title" :list="list" :boardId="boardPassed.id">
           <div slot="footer">
             <a href="" @click.prevent="openCreate(list)">Create task</a>
           </div>
         </pb-lists>
-        <!-- <vs-list>
-          <vs-list-header :title="list.title" color="primary"></vs-list-header>
-          <draggable v-model="list.tasks" :options="{group:'tasks'}">
-            <vs-list-item :title="task.title" :subtitle="task.description" :key="index" v-for="(task, index) in list.tasks">
-              <div class="close"></div>
-            </vs-list-item>
-            <div style="text-align: end; padding: 10px;" slot="footer">
-              <a href="" @click.prevent="openCreate(list)">Create task</a>
-            </div>
-          </draggable>
-        </vs-list> -->
       </vs-col>
     </draggable>
     <vs-prompt
       @vs-cancel="clearDialog"
       @vs-accept="chooseAction"
-      :vs-title="!isBoardSelected ? 'New Board' : 'Edit Board'"
+      :vs-title="'New List'"
       :vs-is-valid="validField"
       :vs-accept-text="!isBoardSelected ? $t('create') : $t('edit')"
       :vs-cancel-text="$t('cancel')"
@@ -54,7 +43,7 @@
     <vs-prompt
       @vs-cancel="clearDialog"
       @vs-accept="chooseActionTask"
-      :vs-title="!isBoardSelected ? 'New Board' : 'Edit Board'"
+      :vs-title="'Task Board'"
       :vs-is-valid="validFieldTask"
       :vs-accept-text="!isBoardSelected ? $t('create') : $t('edit')"
       :vs-cancel-text="$t('cancel')"
@@ -84,11 +73,26 @@ export default {
     draggable,
     'pb-lists': PBLists
   },
-  props: {
-    board: {
-      type: Object,
-      required: true
+  data: () => ({
+    isActive: false,
+    isActiveTask: false,
+    listTitle: '',
+    isBoardSelected: false,
+    boardSelected: {},
+    copyBoards: [],
+    taskTitle: '',
+    taskDescription:'',
+    copyTasks: [],
+    boardPassed: {}
+  }),
+  mounted () {
+    if ( this.$route.params.board ) {
+      localStorage.setItem('boardSelected', JSON.stringify(this.$route.params.board))
     }
+    this.boardPassed = this.$route.params.board ? {...this.$route.params.board} : JSON.parse(localStorage.getItem('boardSelected'))
+  },
+  beforeRouteUpdate(to) {
+    this.boardPassed = to.params.board ?  to.params.board : JSON.parse(localStorage.getItem('boardSelected'))
   },
   computed: {
     validField () {
@@ -99,31 +103,20 @@ export default {
     },
     lists: {
       set (value) {
-        this.board.lists = [...value]
-        this.saveLists(this.board)
+        this.boardPassed.lists = [...value]
+        this.saveLists(this.boardPassed)
       },
       get () {
-        return this.board.lists
+        return this.boardPassed.lists
       }
     }
   },
-  data: () => ({
-    isActive: false,
-    isActiveTask: false,
-    listTitle: '',
-    isBoardSelected: false,
-    boardSelected: {},
-    copyBoards: [],
-    taskTitle: '',
-    taskDescription:'',
-    copyTasks: []
-  }),
   methods:{
     ...mapActions('Global', ['createList', 'deleteBoard', 'editBoard', 'createTask', 'deleteBoard', 'editBoard', 'saveLists', 'saveTasks']),
     create () {
       const payload = {
         title: this.listTitle,
-        board: this.board
+        board: this.boardPassed
       }
       this.createList(payload)
     },
@@ -131,7 +124,7 @@ export default {
       const payload = {
         title: this.taskTitle,
         description: this.taskDescription,
-        board: this.board,
+        board: this.boardPassed,
         list: this.list,
       }
       this.createTask(payload)
@@ -176,8 +169,8 @@ export default {
       else this.edit(this.boardSelected)
       this.$vs.notify({
         color:'primary',
-        title: !this.isBoardSelected ? 'New Board Created' : 'Board edited',
-        text: `Board title: ${this.listTitle}`
+        title: 'New List Created',
+        text: `List title: ${this.listTitle}`
       })
       this.clearDialog()
     },
@@ -186,8 +179,8 @@ export default {
       else this.edit(this.boardSelected)
       this.$vs.notify({
         color:'primary',
-        title: !this.isBoardSelected ? 'New Board Created' : 'Board edited',
-        text: `Board title: ${this.listTitle}`
+        title: 'New Task Created',
+        text: `Task title: ${this.taskTitle}`
       })
       this.clearDialog()
     }
