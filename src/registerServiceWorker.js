@@ -6,7 +6,7 @@ function showUpdateBar() {
   let snackbar = document.getElementById('snackbar');
   snackbar.className = 'show';
 }
-
+if (process.env.NODE_ENV === 'production') {
   register(`${process.env.BASE_URL}service-worker.js`, {
     ready () {
       console.log(
@@ -28,3 +28,4 @@ function showUpdateBar() {
       console.error('Error during service worker registration:', error)
     }
   })
+}
