@@ -21,6 +21,9 @@
         left: 50%;
         bottom: 30px;
       }
+      #reload {
+        cursor: pointer;
+      }
       #snackbar.show {
         visibility: visible;
         -webkit-animation: fadein 0.5s;
@@ -60,7 +63,7 @@
     let refreshing
     document.getElementById('reload').addEventListener('click', function(){
       if (refreshing) return
-      window.location.reload()
+      window.location.reload(true)
       refreshing = true
     })
   </script>
