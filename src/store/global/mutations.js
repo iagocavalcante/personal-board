@@ -63,6 +63,7 @@ const DELETE_TASK = ( state, payload ) => {
     .tasks = state.boards.find(board => board.id === payload.boardId)
     .lists.find(list => list.id === payload.listId)
     .tasks.filter(task => task.id !== payload.task.id)
+  saveCurrentState(state.boards, payload.boardId)
   saveBoardsLocal( state.boards )
 }
 
