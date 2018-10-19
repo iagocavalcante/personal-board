@@ -79,7 +79,6 @@ export default {
     listTitle: '',
     isBoardSelected: false,
     boardSelected: {},
-    copyBoards: [],
     taskTitle: '',
     taskDescription:'',
     copyTasks: [],
@@ -146,23 +145,6 @@ export default {
     openCreate ( list ) {
       this.isActiveTask = true
       this.list = {...list}
-    },
-    edit ( board ) {
-      const payload = {
-        id: board.id,
-        title: this.listTitle,
-        starred: board.starred,
-        tasks: board.tasks,
-        cards: board.cards
-      }
-      this.editBoard(payload)
-    },
-    exclude ( id ) {
-      const payload = {
-        id: id
-      }
-      this.deleteBoard(payload)
-      this.copyBoards = [...this.boards]
     },
     chooseAction () {
       if ( !this.isBoardSelected ) this.create()
