@@ -63,6 +63,7 @@
     let refreshing
     document.getElementById('reload').addEventListener('click', function(){
       caches.keys().then(keys => {
+        console.log('chaves => ', keys)
         keys.forEach(key => caches.delete(key))
         window.location.reload(true)
       })
