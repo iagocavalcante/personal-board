@@ -10,6 +10,7 @@
       #snackbar {
         visibility: hidden;
         min-width: 250px;
+        margin-left: -125px;
         background-color: #333;
         color: #fff;
         text-align: center;
@@ -54,60 +55,16 @@
     <noscript>
       <strong>We're sorry but personal-board doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
     </noscript>
+    <div id="app"></div>
     <div id="snackbar">A new version of this app is available. Click <a id="reload">here</a> to update.</div>
-    <div id="app">
-    </div>
     <!-- built files will be auto injected -->
   </body>
   <script>
-    // let refreshing
-    // document.getElementById('reload').addEventListener('click', function(){
-    //   navigator.serviceWorker.addEventListener('controllerchange', function(event) {
-    //     console.log('Controller loaded')
-    //     window.location.reload()
-    //   })
-    // })
-    
-    function onNewServiceWorker(registration, callback) {
-      if (registration.waiting) {
-        // SW is waiting to activate. Can occur if multiple clients open and
-        // one of the clients is refreshed.
-        return callback();
-      }
-      function listenInstalledStateChange() {
-        registration.installing.addEventListener('statechange', function(event) {
-          if (event.target.state === 'installed') {
-            // A new service worker is available, inform the user
-            callback();
-          }
-        });
-      };
-      if (registration.installing) {
-        return listenInstalledStateChange();
-      }
-      // We are currently controlled so a new SW may be found...
-      // Add a listener in case a new SW is found,
-      registration.addEventListener('updatefound', listenInstalledStateChange);
-    }
-    window.addEventListener('load', function() {
-      // When the user asks to refresh the UI, we'll need to reload the window
-      navigator.serviceWorker.addEventListener('controllerchange', function(event) {
-        console.log('Controller loaded');
-        window.location.reload();
-      });
-      // navigator.serviceWorker.register('/sw.js')
-      // .then(function (registration) {
-      //     // Track updates to the Service Worker.
-      //   if (!navigator.serviceWorker.controller) {
-      //     // The window client isn't currently controlled so it's a new service
-      //     // worker that will activate immediately
-      //     return;
-      //   }
-      //   registration.update();
-      //   onNewServiceWorker(registration, function() {
-      //     showRefreshUI(registration);
-      //   });
-      // });
-    });
+    let refreshing
+    document.getElementById('reload').addEventListener('click', function(){
+      if (refreshing) return
+      window.location.reload(true)
+      refreshing = true
+    })
   </script>
 </html>
