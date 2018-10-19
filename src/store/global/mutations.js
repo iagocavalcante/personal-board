@@ -74,7 +74,7 @@ const EDIT_TASK = ( state, payload ) => {
 
 const SAVE_LISTS = ( state, payload ) => {
   state.boards.find(board => board.id === payload.id).lists.concat(payload.lists)
-  window.localStorage.setItem('boardSelected', JSON.stringify(state.boards.filter(board => board.id === payload.id)[0]))
+  saveCurrentState(state.boards, payload.id)
   saveBoardsLocal( state.boards )
 }
 
@@ -86,8 +86,7 @@ const SAVE_BOARDS = ( state, payload ) => {
 
 const SAVE_TASKS = ( state, payload ) => {
   state.boards.find(board => board.id === payload.boardId).lists.find(list => list.id === payload.list.id).tasks.concat(payload.list.tasks)
-  const boardSelected = state.boards.filter(board => board.id === payload.boardId)[0]
-  window.localStorage.setItem('boardSelected', JSON.stringify(boardSelected))
+  saveCurrentState(state.boards, payload.boardId)
   saveBoardsLocal( state.boards )
 }
 
@@ -100,6 +99,11 @@ const uuidv4 = () => {
   return ([1e7]+-1e3+-4e3+-8e3+-1e11).replace(/[018]/g, c =>
     (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
   )
+}
+
+const saveCurrentState = (boards, boardId) => {
+  const boardSelected = boards.filter(board => board.id === boardId)[0]
+  window.localStorage.setItem('boardSelected', JSON.stringify(boardSelected))
 }
 
 export default {
