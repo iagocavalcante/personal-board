@@ -2,6 +2,11 @@
 
 import { register } from 'register-service-worker'
 
+function showUpdateBar() {
+  let snackbar = document.getElementById('snackbar');
+  snackbar.className = 'show';
+}
+
 if (process.env.NODE_ENV === 'production') {
   register(`${process.env.BASE_URL}service-worker.js`, {
     ready () {
@@ -14,6 +19,7 @@ if (process.env.NODE_ENV === 'production') {
       console.log('Content has been cached for offline use.')
     },
     updated () {
+      showUpdateBar()
       console.log('New content is available; please refresh.')
     },
     offline () {
