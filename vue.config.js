@@ -1,3 +1,4 @@
+const webpack = require('webpack')
 module.exports = {
   pluginOptions: {
     i18n: {
@@ -6,5 +7,14 @@ module.exports = {
       localeDir: 'locales',
       enableInSFC: false
     }
+  },
+  configureWebpack: {
+    plugins: [
+      new webpack.DefinePlugin({
+        'process.env': {
+          PACKAGE_JSON: '"' + escape(JSON.stringify(require('./package.json'))) + '"'
+        }
+      })
+    ]
   }
 }
