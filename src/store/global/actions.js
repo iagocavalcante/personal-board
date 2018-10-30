@@ -1,5 +1,4 @@
 const saveUser = ({ commit }, username) => {
-  if(checkUsername) setUsernameLocalStorage(username)
   commit('SET_USER', { username })
 }
 
@@ -51,13 +50,8 @@ const saveBoards = ({ commit }, payload) => {
   commit('SAVE_BOARDS', payload)
 }
 
-const checkUsername = () => {
-  if (window.localStorage.getItem('username')) return true
-  return false
-}
-
-const setUsernameLocalStorage = (username) => {
-  window.localStorage.setItem('username', username)
+const saveBoardSelected = ({ commit }, payload) => {
+  commit('SAVE_BOARD_SELECTED', payload)
 }
 
 export default {
@@ -73,5 +67,6 @@ export default {
   editTask,
   saveLists,
   saveTasks,
-  saveBoards
+  saveBoards,
+  saveBoardSelected
 }

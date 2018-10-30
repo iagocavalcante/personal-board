@@ -2,6 +2,10 @@ const SET_USER = ( state, payload ) => {
   state.username = payload.username !== '' ? payload.username : 'Anonymous'
 }
 
+const SAVE_BOARD_SELECTED = ( state, payload ) => {
+  state.boardSelected = payload
+}
+
 const CREATE_BOARD = ( state, payload ) => {
   const payloadWithId = Object.assign({}, payload, {
     id: uuidv4(),
@@ -9,18 +13,15 @@ const CREATE_BOARD = ( state, payload ) => {
     starred: false
   })
   state.boards = state.boards.concat(payloadWithId)
-  saveBoardsLocal( state.boards )
 }
 
 const DELETE_BOARD = ( state, payload ) => {
   state.boards = state.boards.filter(board => board.id !== payload.id)
-  saveBoardsLocal( state.boards )
 }
 
 const EDIT_BOARD = ( state, payload ) => {
   state.boards = state.boards.filter(board => board.id !== payload.id)
   state.boards = state.boards.concat(payload)
-  saveBoardsLocal( state.boards )
 }
 
 const CREATE_LIST = ( state, payload ) => {
@@ -31,18 +32,16 @@ const CREATE_LIST = ( state, payload ) => {
     tasks: [],
   })
   state.boards.find(board => board.id === boardId).lists.push(payloadWithId)
-  saveBoardsLocal( state.boards )
+  state.boardSelected.lists.push(payloadWithId)
 }
 
 const DELETE_LIST = ( state, payload ) => {
   state.boards = state.boards.filter(board => board.id !== payload.id)
-  saveBoardsLocal( state.boards )
 }
 
 const EDIT_LIST = ( state, payload ) => {
   state.boards = state.boards.filter(board => board.id !== payload.id)
   state.boards = state.boards.concat(payload)
-  saveBoardsLocal( state.boards )
 }
 
 const CREATE_TASK = ( state, payload ) => {
@@ -54,7 +53,7 @@ const CREATE_TASK = ( state, payload ) => {
     id: uuidv4()
   })
   state.boards.find(board => board.id === boardId).lists.find(list => list.id === listId).tasks.push(payloadWithId)
-  saveBoardsLocal( state.boards )
+  state.boardSelected.lists.find(list => list.id === listId).tasks.push(payloadWithId)
 }
 
 const DELETE_TASK = ( state, payload ) => {
@@ -63,48 +62,36 @@ const DELETE_TASK = ( state, payload ) => {
     .tasks = state.boards.find(board => board.id === payload.boardId)
     .lists.find(list => list.id === payload.listId)
     .tasks.filter(task => task.id !== payload.task.id)
-  saveCurrentState(state.boards, payload.boardId)
-  saveBoardsLocal( state.boards )
+  state.boardSelected.lists.find(list => list.id === payload.listId)
+    .tasks = state.boards.find(board => board.id === payload.boardId)
+    .lists.find(list => list.id === payload.listId)
+    .tasks.filter(task => task.id !== payload.task.id)
 }
 
 const EDIT_TASK = ( state, payload ) => {
   state.boards = state.boards.filter(board => board.id !== payload.id)
   state.boards = state.boards.concat(payload)
-  saveBoardsLocal( state.boards )
 }
 
 const SAVE_LISTS = ( state, payload ) => {
   state.boards.find(board => board.id === payload.id).lists.concat(payload.lists)
-  saveCurrentState(state.boards, payload.id)
-  saveBoardsLocal( state.boards )
+  state.boardSelected.lists.concat(payload.lists)
 }
 
 const SAVE_BOARDS = ( state, payload ) => {
   state.boards = []
   state.boards = state.boards.concat(payload)
-  saveBoardsLocal( state.boards )
 }
 
 const SAVE_TASKS = ( state, payload ) => {
   state.boards.find(board => board.id === payload.boardId).lists.find(list => list.id === payload.list.id).tasks.concat(payload.list.tasks)
-  saveCurrentState(state.boards, payload.boardId)
-  saveBoardsLocal( state.boards )
-}
-
-const saveBoardsLocal = ( updatedBoards ) => {
-  const boards = JSON.stringify(updatedBoards)
-  window.localStorage.setItem('boards', boards)
+  state.boardSelected.lists.find(list => list.id === payload.list.id).tasks.concat(payload.list.tasks)
 }
 
 const uuidv4 = () => {
   return ([1e7]+-1e3+-4e3+-8e3+-1e11).replace(/[018]/g, c =>
     (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
   )
-}
-
-const saveCurrentState = (boards, boardId) => {
-  const boardSelected = boards.filter(board => board.id === boardId)[0]
-  window.localStorage.setItem('boardSelected', JSON.stringify(boardSelected))
 }
 
 export default {
@@ -120,5 +107,6 @@ export default {
   EDIT_TASK,
   SAVE_LISTS,
   SAVE_TASKS,
-  SAVE_BOARDS
+  SAVE_BOARDS,
+  SAVE_BOARD_SELECTED
 }
