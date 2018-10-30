@@ -81,18 +81,12 @@ export default {
     taskTitle: '',
     taskDescription:'',
     copyTasks: [],
-    boardPassed: {}
+    board: {}
   }),
   mounted () {
     if ( this.$route.params.board ) {
       this.saveBoardSelected(this.$route.params.board)
     }
-    this.copyBoardSelected()
-    console.log("Quadro atual => ", this.boardPassed)
-  },
-  beforeRouteUpdate(to) {
-    this.copyBoardSelected()
-    console.log("Quadro atual => ", this.boardPassed)
   },
   computed: {
     validField () {
@@ -105,7 +99,6 @@ export default {
     lists: {
       set (value) {
         this.boardSelected.lists = [...value]
-        console.log('rwdfsd', this.boardSelected)
         this.saveLists(this.boardSelected)
       },
       get () {
@@ -116,7 +109,6 @@ export default {
   methods:{
     ...mapActions('Global', ['createList', 'deleteBoard', 'editBoard', 'createTask', 'deleteBoard', 'editBoard', 'saveLists', 'saveTasks', 'saveBoardSelected']),
     create () {
-      console.log("Create Quadro atual => ", this.boardSelected)
       const payload = {
         title: this.listTitle,
         board: this.boardSelected
@@ -127,7 +119,7 @@ export default {
       const payload = {
         title: this.taskTitle,
         description: this.taskDescription,
-        board: this.boardPassed,
+        board: this.boardSelected,
         list: this.list,
       }
       this.createTask(payload)
@@ -137,9 +129,6 @@ export default {
       this.taskTitle = ''
       this.taskDescription = ''
       this.isBoardSelected = false
-    },
-    copyBoardSelected () {
-      this.boardPassed = Object.assign({}, this.boardSelected)
     },
     openCreate ( list ) {
       this.isActiveTask = true

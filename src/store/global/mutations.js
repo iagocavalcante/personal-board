@@ -32,7 +32,9 @@ const CREATE_LIST = ( state, payload ) => {
     tasks: [],
   })
   state.boards.find(board => board.id === boardId).lists.push(payloadWithId)
-  state.boardSelected.lists.push(payloadWithId)
+  state.boards.map(board => {
+    if( board.id === boardId) state.boardSelected = {...board}
+  })
 }
 
 const DELETE_LIST = ( state, payload ) => {
@@ -53,7 +55,9 @@ const CREATE_TASK = ( state, payload ) => {
     id: uuidv4()
   })
   state.boards.find(board => board.id === boardId).lists.find(list => list.id === listId).tasks.push(payloadWithId)
-  state.boardSelected.lists.find(list => list.id === listId).tasks.push(payloadWithId)
+  state.boards.map(board => {
+    if( board.id === boardId) state.boardSelected = {...board}
+  })
 }
 
 const DELETE_TASK = ( state, payload ) => {
