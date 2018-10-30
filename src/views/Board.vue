@@ -2,7 +2,7 @@
   <vs-row vs-justify="center">
     <vs-col vs-type="flex" vs-align="center" vs-justify="center" vs-w="12">
       <vs-avatar class="ml-10" size="large" src="https://avatars2.githubusercontent.com/u/31676496?s=460&v=4"/>
-      <h1 class="ml-10">{{ boardPassed.title }}</h1>
+      <h1 class="ml-10">{{ boardSelected.title }}</h1>
     </vs-col>
     <vs-divider position="center">
       {{$t('my-tasks')}}
@@ -13,8 +13,8 @@
       </vs-col>
     </vs-row>
     <draggable class="vs-row" style="justify-content: flex-start; display: flex; width: 100%;" v-model="lists" >
-      <vs-col vs-type="flex" vs-justify="center" vs-align="flex-start" vs-w="3" :key="list.id" v-for="list in lists">
-        <pb-lists :listHeader="list.title" :list="list" :boardId="boardPassed.id">
+      <vs-col vs-type="flex" vs-justify="center" vs-align="flex-start" vs-lg="3" vs-sm="3" vs-xs="12"  vs-w="3" :key="list.id" v-for="list in lists">
+        <pb-lists :listHeader="list.title" :list="list" :boardId="boardSelected.id">
           <div slot="footer">
             <a href="" @click.prevent="openCreate(list)">Create task</a>
           </div>
@@ -64,7 +64,7 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex'
+import { mapActions, mapState } from 'vuex'
 import draggable from 'vuedraggable'
 import PBLists from '@/components/PBLists'
 export default {
@@ -78,7 +78,6 @@ export default {
     isActiveTask: false,
     listTitle: '',
     isBoardSelected: false,
-    boardSelected: {},
     taskTitle: '',
     taskDescription:'',
     copyTasks: [],
@@ -86,12 +85,14 @@ export default {
   }),
   mounted () {
     if ( this.$route.params.board ) {
-      localStorage.setItem('boardSelected', JSON.stringify(this.$route.params.board))
+      this.saveBoardSelected(this.$route.params.board)
     }
-    this.boardPassed = this.$route.params.board ? {...this.$route.params.board} : JSON.parse(localStorage.getItem('boardSelected'))
+    this.copyBoardSelected()
+    console.log("Quadro atual => ", this.boardPassed)
   },
   beforeRouteUpdate(to) {
-    this.boardPassed = to.params.board ?  to.params.board : JSON.parse(localStorage.getItem('boardSelected'))
+    this.copyBoardSelected()
+    console.log("Quadro atual => ", this.boardPassed)
   },
   computed: {
     validField () {
@@ -100,22 +101,25 @@ export default {
     validFieldTask () {
       return (this.taskTitle.length > 0 && this.taskDescription.length > 0)
     },
+    ...mapState('Global', ['boardSelected']),
     lists: {
       set (value) {
-        this.boardPassed.lists = [...value]
-        this.saveLists(this.boardPassed)
+        this.boardSelected.lists = [...value]
+        console.log('rwdfsd', this.boardSelected)
+        this.saveLists(this.boardSelected)
       },
       get () {
-        return this.boardPassed.lists
+        return this.boardSelected.lists
       }
     }
   },
   methods:{
-    ...mapActions('Global', ['createList', 'deleteBoard', 'editBoard', 'createTask', 'deleteBoard', 'editBoard', 'saveLists', 'saveTasks']),
+    ...mapActions('Global', ['createList', 'deleteBoard', 'editBoard', 'createTask', 'deleteBoard', 'editBoard', 'saveLists', 'saveTasks', 'saveBoardSelected']),
     create () {
+      console.log("Create Quadro atual => ", this.boardSelected)
       const payload = {
         title: this.listTitle,
-        board: this.boardPassed
+        board: this.boardSelected
       }
       this.createList(payload)
     },
@@ -134,13 +138,8 @@ export default {
       this.taskDescription = ''
       this.isBoardSelected = false
     },
-    openBoard ( board ) {
-      this.isBoardSelected = true
-      this.boardSelected = board
-      this.isActive = true
-      this.listTitle = board.title
-      this.description = board.description
-      
+    copyBoardSelected () {
+      this.boardPassed = Object.assign({}, this.boardSelected)
     },
     openCreate ( list ) {
       this.isActiveTask = true

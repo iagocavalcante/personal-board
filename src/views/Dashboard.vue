@@ -17,7 +17,7 @@
       {{$t('my-board')}}
     </vs-divider>
     <draggable class="vs-row" v-model="reactiveBoard" style="justify-content: flex-start; display: flex; width: 100%;">
-      <vs-col vs-type="flex" vs-justify="flex-start" vs-align="flex-start" vs-w="3" :key="board.id" v-for="board in reactiveBoard">
+      <vs-col vs-type="flex" vs-justify="flex-start" vs-align="flex-start" vs-lg="3" vs-sm="5" vs-xs="12"  vs-w="3" :key="board.id" v-for="board in reactiveBoard">
         <vs-card actionable>
           <div slot="header" @click="goToBoard(board)">
             <vs-row vs-justify="center">
