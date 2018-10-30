@@ -13,8 +13,9 @@ Vue.use(Vuesax)
 Vue.config.productionTip = false
 
 router.beforeEach((to, from, next) => {
+  const username = window.localStorage.getItem('personal-board') ? JSON.parse(window.localStorage.getItem('personal-board')).Global.username : false
   let requiresAuth = to.matched.some(record => record.meta.requiresAuth)
-  if (requiresAuth && !window.localStorage.username) next('/')
+  if (requiresAuth && !username) next('/')
   else next()
 })
 
