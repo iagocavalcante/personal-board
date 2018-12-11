@@ -1,11 +1,14 @@
 <template>
   <vs-row>
     <vs-col vs-offset="2" vs-type="flex" vs-justify="center" vs-align="center" vs-w="8">
+      <img :src="Logo" alt="Personal Board">
+    </vs-col>
+    <vs-col vs-offset="2" vs-type="flex" vs-justify="center" vs-align="center" vs-w="8">
       <div class="box">
         <div>
           <label :for="$t('username-label')">{{ $t("username-label") }}</label>
           <vs-input vs-icon-after="true" color="success" vs-size="large" vs-icon="person" :vs-placeholder="$t('username-placeholder')" v-model="username"/>
-          <vs-button vs-size="large" vs-line-origin="left" vs-type="relief" color="success" @click="save()">{{ $t("button-save") }}</vs-button>
+          <vs-button vs-size="large" vs-line-origin="left" vs-type="relief" color="success" @keyup.enter="save()" @click="save()">{{ $t("button-save") }}</vs-button>
         </div>
       </div>
     </vs-col>
@@ -13,11 +16,13 @@
 </template>
 
 <script>
+import Logo from '@/assets/logo/personalboard-horiz.png'
 import { mapActions } from 'vuex'
 export default {
   name: 'Welcome',
   data: () => ({
-    username: ''
+    username: '',
+    Logo: Logo
   }),
   methods: {
     ...mapActions('Global', ['saveUser']),

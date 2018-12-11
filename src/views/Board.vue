@@ -1,72 +1,80 @@
 <template>
-  <vs-row vs-justify="center">
-    <vs-col vs-type="flex" vs-align="center" vs-justify="center" vs-w="12">
-      <vs-avatar class="ml-10" size="large" src="https://avatars2.githubusercontent.com/u/31676496?s=460&v=4"/>
-      <h1 class="ml-10">{{ boardSelected.title }}</h1>
-    </vs-col>
-    <vs-divider position="center">
-      {{$t('my-tasks')}}
-    </vs-divider>
-    <vs-row vs-justify="center">
-      <vs-col vs-type="flex" vs-align="flex-end" vs-justify="flex-end" vs-w="10" vs-offset="1">
-        <vs-button color="primary" vs-type="relief"  @click.prevent="isActive = true">Create list</vs-button>
-      </vs-col>
+  <div>
+    <vs-row vs-justify="flex-start">
+      <img :src="Logo" width="200" height="80" alt="Personal Board">
     </vs-row>
-    <draggable class="vs-row" style="justify-content: flex-start; display: flex; width: 100%;" v-model="lists" >
-      <vs-col vs-type="flex" vs-justify="center" vs-align="flex-start" vs-lg="3" vs-sm="3" vs-xs="12"  vs-w="3" :key="list.id" v-for="list in lists">
-        <pb-lists :listHeader="list.title" :list="list" :boardId="boardSelected.id">
-          <div slot="footer">
-            <a href="" @click.prevent="openCreate(list)">Create task</a>
-          </div>
-        </pb-lists>
+    <vs-row vs-justify="center">
+      <vs-divider position="center"></vs-divider>
+      <vs-col vs-type="flex" vs-align="center" vs-justify="center" vs-w="12">
+        <vs-avatar class="ml-10" size="large" src="https://avatars2.githubusercontent.com/u/31676496?s=460&v=4"/>
+        <h1 class="ml-10">{{ boardSelected.title }}</h1>
       </vs-col>
-    </draggable>
-    <vs-prompt
-      @vs-cancel="clearDialog"
-      @vs-accept="chooseAction"
-      :vs-title="'New List'"
-      :vs-is-valid="validField"
-      :vs-accept-text="!isBoardSelected ? $t('create') : $t('edit')"
-      :vs-cancel-text="$t('cancel')"
-      :vs-active.sync="isActive"
-      :color="'success'"
-      class="con-vs-dialog">
-        <div class="con-exemple-prompt">
-        <span v-html="$t('board-dialog')"></span>
-          <vs-input :placeholder="$t('board-name-placeholder')" v-model="listTitle"/>
+      <vs-divider position="center">
+        {{$t('my-tasks')}}
+      </vs-divider>
+      <vs-row vs-justify="center">
+        <vs-col vs-type="flex" vs-align="flex-end" vs-justify="flex-end" vs-w="10" vs-offset="1">
+          <vs-button color="primary" vs-type="relief"  @click.prevent="isActive = true">Create list</vs-button>
+        </vs-col>
+      </vs-row>
+      <draggable class="vs-row" style="justify-content: flex-start; display: flex; width: 100%;" v-model="lists" >
+        <vs-col vs-type="flex" vs-justify="center" vs-align="flex-start" vs-lg="3" vs-sm="3" vs-xs="12"  vs-w="3" :key="list.id" v-for="list in lists">
+          <pb-lists :listHeader="list.title" :list="list" :boardId="boardSelected.id">
+            <div slot="footer">
+              <a href="" @click.prevent="openCreate(list)">Create task</a>
+            </div>
+          </pb-lists>
+        </vs-col>
+      </draggable>
+      <vs-prompt
+        @vs-cancel="clearDialog"
+        @vs-accept="chooseAction"
+        :vs-title="'New List'"
+        :vs-is-valid="validField"
+        :vs-accept-text="!isBoardSelected ? $t('create') : $t('edit')"
+        :vs-cancel-text="$t('cancel')"
+        :vs-active.sync="isActive"
+        :color="'success'"
+        class="con-vs-dialog">
+          <div class="con-exemple-prompt">
+          <span v-html="$t('board-dialog')"></span>
+            <vs-input :placeholder="$t('board-name-placeholder')" v-model="listTitle"/>
 
-          <vs-alert :vs-active="!validField" color="danger" vs-icon="new_releases" >
-            {{$t('dialog-invalid')}}
-          </vs-alert>
-        </div>
-    </vs-prompt>
-    <vs-prompt
-      @vs-cancel="clearDialog"
-      @vs-accept="chooseActionTask"
-      :vs-title="'Task Board'"
-      :vs-is-valid="validFieldTask"
-      :vs-accept-text="!isBoardSelected ? $t('create') : $t('edit')"
-      :vs-cancel-text="$t('cancel')"
-      :vs-active.sync="isActiveTask"
-      :color="'success'"
-      class="con-vs-dialog">
-        <div class="con-exemple-prompt">
-        <span v-html="$t('board-dialog')"></span>
-          <vs-input :placeholder="$t('board-name-placeholder')" v-model="taskTitle"/>
-          <vs-textarea :label="$t('board-description-placeholder')" v-model="taskDescription" />
+            <vs-alert :vs-active="!validField" color="danger" vs-icon="new_releases" >
+              {{$t('dialog-invalid')}}
+            </vs-alert>
+          </div>
+      </vs-prompt>
+      <vs-prompt
+        @vs-cancel="clearDialog"
+        @vs-accept="chooseActionTask"
+        :vs-title="'Task Board'"
+        :vs-is-valid="validFieldTask"
+        :vs-accept-text="!isBoardSelected ? $t('create') : $t('edit')"
+        :vs-cancel-text="$t('cancel')"
+        :vs-active.sync="isActiveTask"
+        :color="'success'"
+        class="con-vs-dialog">
+          <div class="con-exemple-prompt">
+          <span v-html="$t('board-dialog')"></span>
+            <vs-input :placeholder="$t('board-name-placeholder')" v-model="taskTitle"/>
+            <vs-textarea :label="$t('board-description-placeholder')" v-model="taskDescription" />
 
-          <vs-alert :vs-active="!validFieldTask" color="danger" vs-icon="new_releases" >
-            {{$t('dialog-invalid')}}
-          </vs-alert>
-        </div>
-    </vs-prompt>
-  </vs-row>
+            <vs-alert :vs-active="!validFieldTask" color="danger" vs-icon="new_releases" >
+              {{$t('dialog-invalid')}}
+            </vs-alert>
+          </div>
+      </vs-prompt>
+    </vs-row>
+  </div>
 </template>
 
 <script>
 import { mapActions, mapState } from 'vuex'
 import draggable from 'vuedraggable'
 import PBLists from '@/components/PBLists'
+import Logo from '@/assets/logo/personalboard-horiz.png'
+
 export default {
   name: 'Board',
   components: {
@@ -81,7 +89,8 @@ export default {
     taskTitle: '',
     taskDescription:'',
     copyTasks: [],
-    board: {}
+    board: {},
+    Logo: Logo
   }),
   mounted () {
     if ( this.$route.params.board ) {
