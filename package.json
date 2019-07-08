@@ -14,7 +14,7 @@
     "vue-i18n": "8.11.2",
     "vue-router": "3.0.7",
     "vuedraggable": "2.16.0",
-    "vuesax": "3.8.77",
+    "vuesax": "3.9.0",
     "vuex": "3.1.1",
     "vuex-persist": "2.0.1"
   },
