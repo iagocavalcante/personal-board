@@ -22,7 +22,7 @@
     "@vue/cli-plugin-babel": "3.9.2",
     "@vue/cli-plugin-eslint": "3.9.2",
     "@vue/cli-plugin-pwa": "3.9.0",
-    "@vue/cli-service": "3.9.2",
+    "@vue/cli-service": "3.9.3",
     "vue-cli-plugin-i18n": "0.6.0",
     "vue-template-compiler": "2.6.10"
   },
