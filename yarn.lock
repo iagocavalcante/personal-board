@@ -8582,10 +8582,10 @@ vuedraggable@2.23.0:
   dependencies:
     sortablejs "^1.9.0"
 
-vuesax@3.10.2:
-  version "3.10.2"
-  resolved "https://registry.yarnpkg.com/vuesax/-/vuesax-3.10.2.tgz#574a7d8c9ed5cc038257525ad84194dacc29a94a"
-  integrity sha512-OfHBdRNvY9DEHsIMrGjhWQtI456+opbXARRYP+xtmwiYObP84RUpT1F7JqetLmmRxNpj/n1WK1XxMo8SSpR4Xg==
+vuesax@3.10.3:
+  version "3.10.3"
+  resolved "https://registry.yarnpkg.com/vuesax/-/vuesax-3.10.3.tgz#6d7aad7d17a4309aec58da7588a55303ee0a1f79"
+  integrity sha512-Gc6cVYuODasmZiYf4SohhM2gYox61m/eVngB8Y1Maly6lfdYdH7kWH7s2MmEAAl98Xq+jloZJIsya9TRocIo0g==
   dependencies:
     chalk "^2.4.2"
     vue "^2.6.9"
