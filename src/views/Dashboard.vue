@@ -11,7 +11,7 @@
           <vs-col vs-type="flex" vs-align="flex-end" vs-w="2"></vs-col>
           <vs-col vs-type="flex" vs-align="flex-end" vs-w="2"></vs-col>
           <vs-col vs-type="flex" vs-justify="center" vs-align="flex-end" vs-w="2">
-            <vs-button style="border-radius: 50%" color="success" vs-type="relief" @click.prevent="isActive = true" vs-icon="add"></vs-button>
+            <vs-button style="border-radius: 50%" color="success" type="relief" @click="isActive = true" icon="add"></vs-button>
           </vs-col>
         </vs-col>
       </vs-col>
@@ -30,7 +30,7 @@
                     </h3>
                   </vs-col>
                   <vs-col vs-type="flex" vs-justify="flex-end" vs-align="flex-end" vs-w="6">
-                    <vs-button vs-type="flat" color="rgb(255,223,0)" vs-icon="star_border"></vs-button>
+                    <vs-button type="flat" color="rgb(255,223,0)" icon="star_border"></vs-button>
                   </vs-col>
                 </vs-col>
               </vs-row>
@@ -40,21 +40,21 @@
             </div>
             <div slot="footer">
               <vs-row vs-justify="flex-end">
-                <vs-button class="ml-5" vs-type="relief" color="danger" vs-icon="delete" @click.prevent="exclude(board.id)"></vs-button>
-                <vs-button class="ml-5" vs-type="relief" color="primary" vs-icon="edit" @click.prevent="openBoard(board)"></vs-button>
+                <vs-button class="ml-5" type="relief" color="danger" icon="delete" @click.prevent="exclude(board.id)"></vs-button>
+                <vs-button class="ml-5" type="relief" color="primary" icon="edit" @click.prevent="openBoard(board)"></vs-button>
               </vs-row>
             </div>
           </vs-card>
         </vs-col>
       </draggable>
       <vs-prompt
-        @vs-cancel="clearDialog"
-        @vs-accept="chooseAction"
-        :vs-title="!isBoardSelected ? 'New Board' : 'Edit Board'"
-        :vs-is-valid="validField"
-        :vs-accept-text="!isBoardSelected ? $t('create') : $t('edit')"
-        :vs-cancel-text="$t('cancel')"
-        :vs-active.sync="isActive"
+        @cancel="clearDialog"
+        @accept="chooseAction"
+        :title="!isBoardSelected ? 'New Board' : 'Edit Board'"
+        :is-valid="validField"
+        :accept-text="!isBoardSelected ? $t('create') : $t('edit')"
+        :cancel-text="$t('cancel')"
+        :active.sync="isActive"
         :color="'success'"
         class="con-vs-dialog">
           <div class="con-exemple-prompt">
@@ -62,7 +62,7 @@
             <vs-input :placeholder="$t('board-name-placeholder')" v-model="title"/>
             <vs-textarea :label="$t('board-description-placeholder')" v-model="description" />
 
-            <vs-alert :vs-active="!validField" color="danger" vs-icon="new_releases" >
+            <vs-alert :active="!validField" color="danger" icon="new_releases" >
               {{$t('dialog-invalid')}}
             </vs-alert>
           </div>
