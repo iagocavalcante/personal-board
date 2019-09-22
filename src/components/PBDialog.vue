@@ -1,12 +1,12 @@
 <template>
   <vs-prompt
-    @vs-cancel="canceltAlert"
-    @vs-accept="acceptAlert"
-    :vs-title="isBoard ? 'New Board' : 'New Card'"
-    :vs-is-valid="validField"
-    :vs-accept-text="$t('create')"
-    :vs-cancel-text="$t('cancel')"
-    :vs-active.sync="activePrompt"
+    @cancel="canceltAlert"
+    @accept="acceptAlert"
+    :title="isBoard ? 'New Board' : 'New Card'"
+    :is-valid="validField"
+    :accept-text="$t('create')"
+    :cancel-text="$t('cancel')"
+    :active.sync="activePrompt"
     color="danger"
     class="con-vs-dialog">
       <div class="con-exemple-prompt">
@@ -14,7 +14,7 @@
         <vs-input :placeholder="placeholderTitle" v-model="title"/>
         <vs-textarea :label="placeholderText" v-model="description" />
 
-        <vs-alert :vs-active="!validField" color="danger" vs-icon="new_releases" >
+        <vs-alert :active="!validField" color="danger" icon="new_releases" >
           {{$t('dialog-invalid')}}
         </vs-alert>
       </div>

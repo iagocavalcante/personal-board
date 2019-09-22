@@ -1,20 +1,19 @@
 <template>
   <div>
-    <vs-row vs-justify="flex-start">
-      <img :src="Logo" width="200" height="80" alt="Personal Board">
-    </vs-row>
     <vs-row vs-justify="center">
-      <vs-divider position="center"></vs-divider>
-      <vs-col vs-type="flex" vs-align="center" vs-justify="center" vs-w="12">
-        <vs-avatar class="ml-10" size="large" src="https://avatars2.githubusercontent.com/u/31676496?s=460&v=4"/>
-        <h1 class="ml-10">{{ boardSelected.title }}</h1>
+      <vs-col class="padding-left" vs-type="flex" vs-justify="flex-start" vs-w="12">
+        <img :src="Logo" width="200" height="80" alt="Personal Board">
+        <vs-col vs-type="flex" vs-align="center" vs-justify="flex-end" vs-w="12">
+          <vs-avatar class="ml-10" size="large" src="https://avatars2.githubusercontent.com/u/31676496?s=460&v=4"/>
+          <h1 class="ml-10">{{ boardSelected.title }}</h1>
+        </vs-col>
       </vs-col>
       <vs-divider position="center">
         {{$t('my-tasks')}}
       </vs-divider>
       <vs-row vs-justify="center">
-        <vs-col vs-type="flex" vs-align="flex-end" vs-justify="flex-end" vs-w="10" vs-offset="1">
-          <vs-button color="primary" vs-type="relief"  @click.prevent="isActive = true">Create list</vs-button>
+        <vs-col vs-type="flex" class="padding-left" vs-align="flex-end" vs-justify="flex-end" vs-w="12">
+          <vs-button color="primary" type="relief"  @click.prevent="isActive = true">Create list</vs-button>
         </vs-col>
       </vs-row>
       <draggable class="vs-row" style="justify-content: flex-start; display: flex; width: 100%;" v-model="lists" >
@@ -27,32 +26,32 @@
         </vs-col>
       </draggable>
       <vs-prompt
-        @vs-cancel="clearDialog"
-        @vs-accept="chooseAction"
-        :vs-title="'New List'"
-        :vs-is-valid="validField"
-        :vs-accept-text="!isBoardSelected ? $t('create') : $t('edit')"
-        :vs-cancel-text="$t('cancel')"
-        :vs-active.sync="isActive"
+        @cancel="clearDialog"
+        @accept="chooseAction"
+        :title="'New List'"
+        :is-valid="validField"
+        :accept-text="!isBoardSelected ? $t('create') : $t('edit')"
+        :cancel-text="$t('cancel')"
+        :active.sync="isActive"
         :color="'success'"
         class="con-vs-dialog">
           <div class="con-exemple-prompt">
           <span v-html="$t('board-dialog')"></span>
             <vs-input :placeholder="$t('board-name-placeholder')" v-model="listTitle"/>
 
-            <vs-alert :vs-active="!validField" color="danger" vs-icon="new_releases" >
+            <vs-alert :active="!validField" color="danger" icon="new_releases" >
               {{$t('dialog-invalid')}}
             </vs-alert>
           </div>
       </vs-prompt>
       <vs-prompt
-        @vs-cancel="clearDialog"
-        @vs-accept="chooseActionTask"
-        :vs-title="'Task Board'"
-        :vs-is-valid="validFieldTask"
-        :vs-accept-text="!isBoardSelected ? $t('create') : $t('edit')"
-        :vs-cancel-text="$t('cancel')"
-        :vs-active.sync="isActiveTask"
+        @cancel="clearDialog"
+        @accept="chooseActionTask"
+        :title="'Task Board'"
+        :is-valid="validFieldTask"
+        :accept-text="!isBoardSelected ? $t('create') : $t('edit')"
+        :cancel-text="$t('cancel')"
+        :active.sync="isActiveTask"
         :color="'success'"
         class="con-vs-dialog">
           <div class="con-exemple-prompt">
@@ -60,7 +59,7 @@
             <vs-input :placeholder="$t('board-name-placeholder')" v-model="taskTitle"/>
             <vs-textarea :label="$t('board-description-placeholder')" v-model="taskDescription" />
 
-            <vs-alert :vs-active="!validFieldTask" color="danger" vs-icon="new_releases" >
+            <vs-alert :active="!validFieldTask" color="danger" icon="new_releases" >
               {{$t('dialog-invalid')}}
             </vs-alert>
           </div>
@@ -168,6 +167,10 @@ export default {
 </script>
 
 <style scoped>
+.padding-left {
+  padding: 0 15px;
+}
+
 .con-exemple-prompt {
   padding: 10px;
   padding-bottom: 0;
