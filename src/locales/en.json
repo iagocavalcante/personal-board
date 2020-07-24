@@ -9,7 +9,14 @@
   "edit": "Edit",
   "cancel": "Cancel",
   "dialog-invalid": "Fields can not be empty please enter the data",
+  "board-title": "Board",
   "board-name-placeholder": "Enter with board name",
   "board-description-placeholder": "Enter with board description",
-  "board-dialog": "Enter your board name and board description to <b>continue</b>."
+  "board-dialog": "Enter your board name and board description to <b>continue</b>.",
+  "task-title": "New task",
+  "task-name-placeholder": "Enter with task name",
+  "task-description-placeholder": "Enter with task description",
+  "task-dialog": "Enter your task name and task description to <b>continue</b>.",
+  "list-name-placeholder": "Enter with list name",
+  "list-dialog": "New list"
 }

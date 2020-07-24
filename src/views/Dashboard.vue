@@ -4,7 +4,7 @@
       <img :src="Logo" width="200" height="80" alt="Personal Board">
       <vs-col  vs-type="flex" vs-align="center" vs-justify="center" vs-w="12">
         <vs-col vs-type="flex" vs-justify="flex-start" vs-align="center" vs-w="6">
-          <vs-avatar class="ml-10" size="large" src="https://avatars2.githubusercontent.com/u/31676496?s=460&v=4"/>
+          <vs-avatar class="ml-10" size="large" src="https://api.adorable.io/avatars/400/86345c54239c93f31229c54772935b4d.png"/>
           <h1 class="ml-10">{{ $t('welcome-user')}} {{ username }}</h1>
         </vs-col>
         <vs-col vs-type="flex" vs-justify="space-between" vs-align="center" vs-w="6">
@@ -105,10 +105,10 @@ export default {
     tempBoard: [],
     Logo: Logo
   }),
-  mounted() {
+  mounted () {
     this.tempBoard = [...this.boards]
   },
-  methods:{
+  methods: {
     ...mapActions('Global', ['createBoard', 'deleteBoard', 'editBoard', 'saveBoards']),
     create () {
       const payload = {
@@ -117,20 +117,19 @@ export default {
       }
       this.createBoard(payload)
     },
-    clearDialog(){
+    clearDialog () {
       this.title = ''
       this.description = ''
       this.isBoardSelected = false
     },
-    openBoard ( board ) {
+    openBoard (board) {
       this.isBoardSelected = true
-      this.boardSelected = {...board}
+      this.boardSelected = { ...board }
       this.isActive = true
       this.title = board.title
       this.description = board.description
-      
     },
-    edit ( board ) {
+    edit (board) {
       const payload = {
         id: board.id,
         title: this.title,
@@ -140,21 +139,21 @@ export default {
       }
       this.editBoard(payload)
     },
-    exclude ( id ) {
+    exclude (id) {
       const payload = {
         id: id
       }
       this.deleteBoard(payload)
       this.reactiveBoard = [...this.boards]
     },
-    goToBoard ( board ) {
-      this.$router.push({ name: 'board', params: { board: board}})
+    goToBoard (board) {
+      this.$router.push({ name: 'board', params: { board: board } })
     },
     chooseAction () {
-      if ( !this.isBoardSelected ) this.create()
+      if (!this.isBoardSelected) this.create()
       else this.edit(this.boardSelected)
       this.$vs.notify({
-        color:'primary',
+        color: 'primary',
         title: !this.isBoardSelected ? 'New Board Created' : 'Board edited',
         text: `Board title: ${this.title}`
       })
@@ -193,5 +192,3 @@ export default {
   margin-top: 10px;
 }
 </style>
-
-

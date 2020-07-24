@@ -7,7 +7,7 @@
       <div class="box">
         <div>
           <label :for="$t('username-label')">{{ $t("username-label") }}</label>
-          <vs-input icon-after="true" color="success" vs-size="large" icon="person" :vs-placeholder="$t('username-placeholder')" v-model="username"/>
+          <vs-input color="success" size="large" icon="person" :vs-placeholder="$t('username-placeholder')" v-model="username"/>
           <vs-button vs-size="large" vs-line-origin="left" type="relief" color="success" @keyup.enter="save()" @click="save()">{{ $t("button-save") }}</vs-button>
         </div>
       </div>

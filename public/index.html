@@ -5,66 +5,13 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
     <link rel="icon" href="<%= BASE_URL %>favicon.ico">
-    <title>Personal Board</title>
-    <style>
-      #snackbar {
-        visibility: hidden;
-        min-width: 250px;
-        margin-left: -125px;
-        background-color: #333;
-        color: #fff;
-        text-align: center;
-        border-radius: 2px;
-        padding: 16px;
-        position: fixed;
-        z-index: 1;
-        left: 50%;
-        bottom: 30px;
-      }
-      #reload {
-        cursor: pointer;
-      }
-      #snackbar.show {
-        visibility: visible;
-        -webkit-animation: fadein 0.5s;
-        animation: fadein 0.5s;
-      }
-      @-webkit-keyframes fadein {
-        from {
-          bottom: 0;
-          opacity: 0;
-        }
-        to {
-          bottom: 30px;
-          opacity: 1;
-        }
-      }
-      @keyframes fadein {
-        from {
-          bottom: 0;
-          opacity: 0;
-        }
-        to {
-          bottom: 30px;
-          opacity: 1;
-        }
-      }
-    </style>
+    <title><%= htmlWebpackPlugin.options.title %></title>
   </head>
   <body>
     <noscript>
-      <strong>We're sorry but personal-board doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
+      <strong>We're sorry but <%= htmlWebpackPlugin.options.title %> doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
     </noscript>
     <div id="app"></div>
-    <div id="snackbar">A new version of this app is available. Press Ctrl + F5 to update or <a id="reload" href="">click here</a>.</div>
     <!-- built files will be auto injected -->
   </body>
-  <script>
-    let refreshing
-    document.getElementById('reload').addEventListener('click', function(){
-      if (refreshing) return
-      window.location.reload(true)
-      refreshing = true
-    })
-  </script>
 </html>

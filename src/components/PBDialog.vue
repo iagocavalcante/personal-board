@@ -48,16 +48,16 @@ export default {
     },
     ...mapState('Global', ['activePrompt'])
   },
-  methods:{
+  methods: {
     ...mapActions('Global', ['closeDialog']),
-    acceptAlert(){
+    acceptAlert () {
       this.$vs.notify({
-        color:'success',
+        color: 'success',
         title: this.title,
         text: this.description
       })
     },
-    canceltAlert(){
+    canceltAlert () {
       this.title = ''
       this.description = ''
       this.closeDialog()

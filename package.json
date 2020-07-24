@@ -5,49 +5,43 @@
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint"
+    "test:unit": "vue-cli-service test:unit",
+    "lint": "vue-cli-service lint",
+    "i18n:report": "vue-cli-service i18n:report --src './src/**/*.?(js|vue)' --locales './src/locales/**/*.json'"
   },
   "dependencies": {
-    "material-icons": "0.3.1",
-    "register-service-worker": "1.7.1",
-    "vue": "2.6.11",
-    "vue-i18n": "8.18.2",
-    "vue-router": "3.3.4",
-    "vuedraggable": "2.24.0",
-    "vuesax": "3.11.17",
-    "vuex": "3.5.1",
-    "vuex-persist": "2.2.0"
+    "core-js": "^3.6.5",
+    "material-icons": "^0.3.1",
+    "register-service-worker": "^1.7.1",
+    "vue": "^2.6.11",
+    "vue-i18n": "^8.17.3",
+    "vue-router": "^3.2.0",
+    "vuedraggable": "^2.24.0",
+    "vuesax": "^3.11.17",
+    "vuex": "^3.4.0",
+    "vuex-persist": "^2.2.0"
   },
   "devDependencies": {
-    "@vue/cli-plugin-babel": "4.4.6",
-    "@vue/cli-plugin-eslint": "4.4.6",
-    "@vue/cli-plugin-pwa": "4.4.6",
-    "@vue/cli-service": "4.4.6",
-    "vue-cli-plugin-i18n": "1.0.1",
-    "vue-template-compiler": "2.6.11"
-  },
-  "eslintConfig": {
-    "root": true,
-    "env": {
-      "node": true
-    },
-    "extends": [
-      "plugin:vue/essential",
-      "eslint:recommended"
-    ],
-    "rules": {},
-    "parserOptions": {
-      "parser": "babel-eslint"
-    }
-  },
-  "postcss": {
-    "plugins": {
-      "autoprefixer": {}
-    }
-  },
-  "browserslist": [
-    "> 1%",
-    "last 2 versions",
-    "not ie <= 8"
-  ]
+    "@intlify/vue-i18n-loader": "^1.0.0",
+    "@vue/cli-plugin-babel": "~4.4.0",
+    "@vue/cli-plugin-eslint": "~4.4.0",
+    "@vue/cli-plugin-pwa": "~4.4.0",
+    "@vue/cli-plugin-router": "~4.4.0",
+    "@vue/cli-plugin-unit-jest": "~4.4.0",
+    "@vue/cli-plugin-vuex": "~4.4.0",
+    "@vue/cli-service": "~4.4.0",
+    "@vue/eslint-config-standard": "^5.1.2",
+    "@vue/test-utils": "^1.0.3",
+    "babel-eslint": "^10.1.0",
+    "eslint": "^6.7.2",
+    "eslint-plugin-import": "^2.20.2",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-promise": "^4.2.1",
+    "eslint-plugin-standard": "^4.0.0",
+    "eslint-plugin-vue": "^6.2.2",
+    "node-sass": "^4.12.0",
+    "sass-loader": "^8.0.2",
+    "vue-cli-plugin-i18n": "~1.0.1",
+    "vue-template-compiler": "^2.6.11"
+  }
 }

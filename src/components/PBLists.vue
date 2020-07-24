@@ -45,7 +45,7 @@ export default {
     tasks: {
       set (value) {
         this.list.tasks = [...value]
-        this.saveTasks({boardId: this.boardId, list: this.list})  
+        this.saveTasks({ boardId: this.boardId, list: this.list })
       },
       get () {
         return this.list.tasks
@@ -54,8 +54,8 @@ export default {
   },
   methods: {
     ...mapActions('Global', ['saveTasks', 'deleteTask']),
-    removeTask ( task ) {
-      this.deleteTask({boardId: this.boardId, listId: this.list.id, task: task})
+    removeTask (task) {
+      this.deleteTask({ boardId: this.boardId, listId: this.list.id, task: task })
     }
   }
 }

@@ -9,7 +9,14 @@
   "edit": "Editar",
   "cancel": "Cancelar",
   "dialog-invalid": "Os campos não podem ser vázios, entre com dados",
+  "board-title": "Task Board",
   "board-name-placeholder": "Digite o nome do quadro",
   "board-description-placeholder": "Digite a descrição do quadro",
-  "board-dialog": "Digite o nome do quadro e o a descrição para <b>continuar</b>."
+  "board-dialog": "Digite o nome do quadro e o a descrição para <b>continuar</b>.",
+  "task-title": "Nova tarefa",
+  "task-name-placeholder": "Digite o nome da tarefa",
+  "task-description-placeholder": "Digite a descrição da tarefa",
+  "task-dialog": "Digite o nome da tarefa e a descrição para <b>continuar</b>.",
+  "list-name-placeholder": "Digite o nome da lista",
+  "list-dialog": "Nova lista"
 }

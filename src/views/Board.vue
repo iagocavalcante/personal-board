@@ -1,11 +1,11 @@
 <template>
   <div>
     <vs-row vs-justify="center">
-      <vs-col class="padding-left" vs-type="flex" vs-justify="flex-start" vs-w="12">
-        <img :src="Logo" width="200" height="80" alt="Personal Board">
+      <vs-col class="padding-left" vs-type="flex" vs-w="12">
+        <img vs-sm="12" vs-xs="12" :src="Logo" width="200" height="80" alt="Personal Board">
         <vs-col vs-type="flex" vs-align="center" vs-justify="flex-end" vs-w="12">
-          <vs-avatar class="ml-10" size="large" src="https://avatars2.githubusercontent.com/u/31676496?s=460&v=4"/>
-          <h1 class="ml-10">{{ boardSelected.title }}</h1>
+          <vs-avatar class="ml-10" size="large" src="https://api.adorable.io/avatars/400/86345c54239c93f31229c54772935b4d.png"/>
+          <h1 class="ml-10 go-back" @click="goBack()">{{ boardSelected.title }}</h1>
         </vs-col>
       </vs-col>
       <vs-divider position="center">
@@ -28,7 +28,7 @@
       <vs-prompt
         @cancel="clearDialog"
         @accept="chooseAction"
-        :title="'New List'"
+        :title="$t('list-dialog')"
         :is-valid="validField"
         :accept-text="!isBoardSelected ? $t('create') : $t('edit')"
         :cancel-text="$t('cancel')"
@@ -36,8 +36,8 @@
         :color="'success'"
         class="con-vs-dialog">
           <div class="con-exemple-prompt">
-          <span v-html="$t('board-dialog')"></span>
-            <vs-input :placeholder="$t('board-name-placeholder')" v-model="listTitle"/>
+          <span v-html="$t('list-name-placeholder')"></span>
+            <vs-input :placeholder="$t('list-name-placeholder')" v-model="listTitle"/>
 
             <vs-alert :active="!validField" color="danger" icon="new_releases" >
               {{$t('dialog-invalid')}}
@@ -47,7 +47,7 @@
       <vs-prompt
         @cancel="clearDialog"
         @accept="chooseActionTask"
-        :title="'Task Board'"
+        :title="$t('task-title')"
         :is-valid="validFieldTask"
         :accept-text="!isBoardSelected ? $t('create') : $t('edit')"
         :cancel-text="$t('cancel')"
@@ -55,9 +55,9 @@
         :color="'success'"
         class="con-vs-dialog">
           <div class="con-exemple-prompt">
-          <span v-html="$t('board-dialog')"></span>
-            <vs-input :placeholder="$t('board-name-placeholder')" v-model="taskTitle"/>
-            <vs-textarea :label="$t('board-description-placeholder')" v-model="taskDescription" />
+          <span v-html="$t('task-dialog')"></span>
+            <vs-input :placeholder="$t('task-name-placeholder')" v-model="taskTitle"/>
+            <vs-textarea :label="$t('task-description-placeholder')" v-model="taskDescription" />
 
             <vs-alert :active="!validFieldTask" color="danger" icon="new_releases" >
               {{$t('dialog-invalid')}}
@@ -86,13 +86,13 @@ export default {
     listTitle: '',
     isBoardSelected: false,
     taskTitle: '',
-    taskDescription:'',
+    taskDescription: '',
     copyTasks: [],
     board: {},
     Logo: Logo
   }),
   mounted () {
-    if ( this.$route.params.board ) {
+    if (this.$route.params.board) {
       this.saveBoardSelected(this.$route.params.board)
     }
   },
@@ -114,8 +114,11 @@ export default {
       }
     }
   },
-  methods:{
+  methods: {
     ...mapActions('Global', ['createList', 'deleteBoard', 'editBoard', 'createTask', 'deleteBoard', 'editBoard', 'saveLists', 'saveTasks', 'saveBoardSelected']),
+    goBack () {
+      this.$router.push({ name: 'dashboard' })
+    },
     create () {
       const payload = {
         title: this.listTitle,
@@ -128,35 +131,35 @@ export default {
         title: this.taskTitle,
         description: this.taskDescription,
         board: this.boardSelected,
-        list: this.list,
+        list: this.list
       }
       this.createTask(payload)
     },
-    clearDialog(){
+    clearDialog () {
       this.listTitle = ''
       this.taskTitle = ''
       this.taskDescription = ''
       this.isBoardSelected = false
     },
-    openCreate ( list ) {
+    openCreate (list) {
       this.isActiveTask = true
-      this.list = {...list}
+      this.list = { ...list }
     },
     chooseAction () {
-      if ( !this.isBoardSelected ) this.create()
+      if (!this.isBoardSelected) this.create()
       else this.edit(this.boardSelected)
       this.$vs.notify({
-        color:'primary',
+        color: 'primary',
         title: 'New List Created',
         text: `List title: ${this.listTitle}`
       })
       this.clearDialog()
     },
     chooseActionTask () {
-      if ( !this.isBoardSelected ) this.taskCreate()
+      if (!this.isBoardSelected) this.taskCreate()
       else this.edit(this.boardSelected)
       this.$vs.notify({
-        color:'primary',
+        color: 'primary',
         title: 'New Task Created',
         text: `Task title: ${this.taskTitle}`
       })
@@ -186,4 +189,12 @@ export default {
   margin-top: 10px;
 }
 
+.go-back {
+  cursor: pointer;
+}
+
+.go-back:hover {
+  cursor: pointer;
+  color: rgb(31,116,255);
+}
 </style>
