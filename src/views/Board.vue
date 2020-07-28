@@ -4,9 +4,11 @@
       <vs-col class="padding-left" vs-type="flex" vs-w="12">
         <img vs-sm="12" vs-xs="12" :src="Logo" width="200" height="80" alt="Personal Board">
         <vs-col vs-type="flex" vs-align="center" vs-justify="flex-end" vs-w="12">
-          <vs-avatar class="ml-10" size="large" src="https://api.adorable.io/avatars/400/86345c54239c93f31229c54772935b4d.png"/>
-          <h1 class="ml-10 go-back" @click="goBack()">{{ boardSelected.title }}</h1>
+          <h1 class="ml-10">{{ boardSelected.title }}</h1>
         </vs-col>
+      </vs-col>
+      <vs-col class="padding-left" vs-type="flex" vs-w="12">
+        <h3 class="mt-10 go-back" @click="goBack()">Go back to dashboard</h3>
       </vs-col>
       <vs-divider position="center">
         {{$t('my-tasks')}}
@@ -103,7 +105,7 @@ export default {
     validFieldTask () {
       return (this.taskTitle.length > 0 && this.taskDescription.length > 0)
     },
-    ...mapState('Global', ['boardSelected']),
+    ...mapState('Global', ['boardSelected', 'username']),
     lists: {
       set (value) {
         this.boardSelected.lists = [...value]
@@ -190,6 +192,7 @@ export default {
 }
 
 .go-back {
+  margin-top: 20px;
   cursor: pointer;
 }
 

@@ -73,12 +73,14 @@ const DELETE_TASK = (state, payload) => {
 }
 
 const EDIT_TASK = (state, payload) => {
-  state.boards = state.boards.filter(board => board.id !== payload.id)
-  state.boards = state.boards.concat(payload)
+  state.boards.find(board => board.id === payload.boardId).lists.find(list => list.id === payload.listId).tasks = state.boards.find(board => board.id === payload.boardId).lists.find(list => list.id === payload.listId).tasks.filter(task => task.id !== payload.task.id)
+  state.boards.find(board => board.id === payload.boardId).lists.find(list => list.id === payload.listId).tasks = state.boards.find(board => board.id === payload.boardId).lists.find(list => list.id === payload.listId).tasks.concat(payload.task)
+  state.boardSelected.lists.find(list => list.id === payload.listId).tasks = state.boardSelected.lists.find(list => list.id === payload.listId).tasks.filter(task => task.id !== payload.task.id)
+  state.boardSelected.lists.find(list => list.id === payload.listId).tasks = state.boardSelected.lists.find(list => list.id === payload.listId).tasks.concat(payload.task)
 }
 
 const SAVE_LISTS = (state, payload) => {
-  state.boards.find(board => board.id === payload.id).lists.concat(payload.lists)
+  state.boardSelected.find(board => board.id === payload.id).lists.concat(payload.lists)
   state.boardSelected.lists.concat(payload.lists)
 }
 

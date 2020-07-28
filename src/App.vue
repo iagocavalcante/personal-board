@@ -34,6 +34,8 @@ footer {
 }
 
 .footer {
+  background-color: #e5e5e5;
+  padding: 10px;
   text-align: center;
   color: rgb(31,116,255)
 }
