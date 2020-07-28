@@ -10,7 +10,7 @@
     "i18n:report": "vue-cli-service i18n:report --src './src/**/*.?(js|vue)' --locales './src/locales/**/*.json'"
   },
   "dependencies": {
-    "@testing-library/jest-dom": "5.11.1",
+    "@testing-library/jest-dom": "5.11.2",
     "@testing-library/vue": "5.0.4",
     "core-js": "3.6.5",
     "material-icons": "0.3.1",
