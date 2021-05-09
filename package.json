@@ -24,7 +24,7 @@
     "vuex-persist": "2.2.0"
   },
   "devDependencies": {
-    "@intlify/vue-i18n-loader": "1.0.0",
+    "@intlify/vue-i18n-loader": "2.1.0",
     "@vue/cli-plugin-babel": "4.4.6",
     "@vue/cli-plugin-eslint": "4.4.6",
     "@vue/cli-plugin-pwa": "4.4.6",
