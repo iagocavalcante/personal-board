@@ -13,7 +13,7 @@
     "@testing-library/jest-dom": "5.11.1",
     "@testing-library/vue": "5.0.4",
     "core-js": "3.6.5",
-    "material-icons": "0.3.1",
+    "material-icons": "0.7.7",
     "register-service-worker": "1.7.1",
     "vue": "2.6.11",
     "vue-i18n": "8.18.2",
