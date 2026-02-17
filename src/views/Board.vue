@@ -87,12 +87,13 @@ const goBack = () => {
 const createList = () => {
   if (!listTitle.value) {
     message.error('Please enter a list title')
-    return
+    return false // Prevent modal from closing
   }
   globalStore.createList({ board: boardSelected.value, title: listTitle.value })
   message.success('List created')
   listTitle.value = ''
   showListDialog.value = false
+  return true
 }
 
 const openCreateTask = (list) => {
@@ -103,7 +104,7 @@ const openCreateTask = (list) => {
 const createTask = () => {
   if (!taskTitle.value || !taskDescription.value) {
     message.error('Please fill all fields')
-    return
+    return false // Prevent modal from closing
   }
   globalStore.createTask({ 
     board: boardSelected.value, 
@@ -113,6 +114,7 @@ const createTask = () => {
   })
   message.success('Task created')
   clearTaskForm()
+  return true
 }
 
 const clearTaskForm = () => {

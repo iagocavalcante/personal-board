@@ -107,7 +107,7 @@ const openEdit = (board) => {
 const saveBoard = () => {
   if (!form.value.title || !form.value.description) {
     message.error('Please fill all fields')
-    return
+    return false
   }
 
   if (isEditing.value) {
@@ -119,6 +119,7 @@ const saveBoard = () => {
   }
   
   clearForm()
+  return true
 }
 
 const clearForm = () => {
