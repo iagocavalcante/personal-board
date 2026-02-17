@@ -1,27 +1,23 @@
-import Vue from 'vue'
+import { createApp } from 'vue'
+import { createPinia } from 'pinia'
+import naive from 'naive-ui'
 import App from './App.vue'
-import Vuesax from 'vuesax'
-import 'vuesax/dist/vuesax.css' // Vuesax styles
-import 'material-icons/iconfont/material-icons.css'
 import router from './router'
-import './registerServiceWorker'
-import i18n from './i18n'
-import store from './store'
+import { i18n } from './i18n'
+import { useGlobalStore } from './store/global'
 
-Vue.use(Vuesax)
+import './assets/main.scss'
 
-Vue.config.productionTip = false
+const app = createApp(App)
+const pinia = createPinia()
 
-router.beforeEach((to, from, next) => {
-  const username = window.localStorage.getItem('personal-board') ? JSON.parse(window.localStorage.getItem('personal-board')).Global.username : false
-  const requiresAuth = to.matched.some(record => record.meta.requiresAuth)
-  if (requiresAuth && !username) next('/')
-  else next()
-})
+app.use(pinia)
+app.use(router)
+app.use(i18n)
+app.use(naive)
 
-new Vue({
-  router,
-  i18n,
-  store,
-  render: h => h(App)
-}).$mount('#app')
+// Load persisted data
+const globalStore = useGlobalStore()
+globalStore.loadFromStorage()
+
+app.mount('#app')

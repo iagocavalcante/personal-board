@@ -1,62 +1,51 @@
 <template>
-  <vs-row>
-    <vs-col vs-offset="2" vs-type="flex" vs-justify="center" vs-align="center" vs-w="8">
-      <img :src="Logo" alt="Personal Board">
-    </vs-col>
-    <vs-col vs-offset="2" vs-type="flex" vs-justify="center" vs-align="center" vs-w="8">
-      <div class="box">
-        <div>
-          <label :for="$t('username-label')">{{ $t("username-label") }}</label>
-          <vs-input color="success" size="large" icon="person" :vs-placeholder="$t('username-placeholder')" v-model="username"/>
-          <vs-button vs-size="large" vs-line-origin="left" type="relief" color="success" @keyup.enter="save()" @click="save()">{{ $t("button-save") }}</vs-button>
-        </div>
-      </div>
-    </vs-col>
-  </vs-row>
+  <div class="welcome">
+    <n-space vertical align="center" justify="center" style="height: 80vh">
+      <n-image :src="Logo" width="300" />
+      
+      <n-card style="width: 400px; margin-top: 20px">
+        <n-space vertical>
+          <n-text>{{ $t('username-label') }}</n-text>
+          <n-input 
+            v-model:value="username" 
+            placeholder="AnonyDog"
+            size="large"
+            @keyup.enter="save"
+          >
+            <template #prefix>
+              <n-icon><PersonIcon /></n-icon>
+            </template>
+          </n-input>
+          <n-button type="success" size="large" block @click="save">
+            {{ $t('button-save') }}
+          </n-button>
+        </n-space>
+      </n-card>
+    </n-space>
+  </div>
 </template>
 
-<script>
+<script setup>
+import { ref } from 'vue'
+import { useRouter } from 'vue-router'
+import { NSpace, NCard, NInput, NButton, NIcon, NImage, NText } from 'naive-ui'
 import Logo from '@/assets/logo/personalboard-horiz.png'
-import { mapActions } from 'vuex'
-export default {
-  name: 'Welcome',
-  data: () => ({
-    username: '',
-    Logo: Logo
-  }),
-  methods: {
-    ...mapActions('Global', ['saveUser']),
-    save () {
-      this.saveUser(this.username)
-      this.$router.push('dashboard')
-    }
-  }
+import { useGlobalStore } from '@/store/global'
+
+const router = useRouter()
+const globalStore = useGlobalStore()
+const username = ref('')
+
+const save = () => {
+  globalStore.setUsername(username.value)
+  router.push('/dashboard')
 }
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-.box {
-
-  text-align: center;
-  margin-top: 60px;
+.welcome {
   display: flex;
-  align-items: center;
   justify-content: center;
+  align-items: center;
 }
-
-.box div {
-  vertical-align: middle;
-  width: 290px;
-  height: 45px;
-}
-
-.vs-input {
-  margin-top: 20px;
-}
-
-.vs-button {
-  margin-top: 20px;
-}
-
 </style>

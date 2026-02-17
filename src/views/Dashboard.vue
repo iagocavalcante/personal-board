@@ -1,194 +1,145 @@
 <template>
-  <div>
-    <vs-row vs-justify="center">
-      <img :src="Logo" width="200" height="80" alt="Personal Board">
-      <vs-col  vs-type="flex" vs-align="center" vs-justify="center" vs-w="12">
-        <vs-col vs-type="flex" vs-justify="flex-start" vs-align="center" vs-w="6">
-          <vs-avatar class="ml-10" size="large" src="https://api.adorable.io/avatars/400/86345c54239c93f31229c54772935b4d.png"/>
-          <h1 class="ml-10">{{ $t('welcome-user')}} {{ username }}</h1>
-        </vs-col>
-        <vs-col vs-type="flex" vs-justify="space-between" vs-align="center" vs-w="6">
-          <vs-col vs-type="flex" vs-align="flex-end" vs-w="2"></vs-col>
-          <vs-col vs-type="flex" vs-align="flex-end" vs-w="2"></vs-col>
-          <vs-col vs-type="flex" vs-justify="center" vs-align="flex-end" vs-w="2">
-            <vs-button style="border-radius: 50%" color="success" type="relief" @click="isActive = true" icon="add"></vs-button>
-          </vs-col>
-        </vs-col>
-      </vs-col>
-      <vs-divider position="center">
-        {{$t('my-board')}}
-      </vs-divider>
-      <draggable class="vs-row" v-model="reactiveBoard" style="justify-content: flex-start; display: flex; width: 100%;">
-        <vs-col vs-type="flex" vs-justify="flex-start" vs-align="flex-start" vs-lg="3" vs-sm="5" vs-xs="12"  vs-w="3" :key="board.id" v-for="board in reactiveBoard">
-          <vs-card actionable>
-            <div slot="header" @click="goToBoard(board)">
-              <vs-row vs-justify="center">
-                <vs-col vs-type="flex" vs-w="12">
-                  <vs-col vs-type="flex" vs-w="6">
-                    <h3>
-                      {{board.title}}
-                    </h3>
-                  </vs-col>
-                  <vs-col vs-type="flex" vs-justify="flex-end" vs-align="flex-end" vs-w="6">
-                    <vs-button type="flat" color="rgb(255,223,0)" icon="star_border"></vs-button>
-                  </vs-col>
-                </vs-col>
-              </vs-row>
-            </div>
-            <div>
-              <span>{{board.description}}</span>
-            </div>
-            <div slot="footer">
-              <vs-row vs-justify="flex-end">
-                <vs-button class="ml-5" type="relief" color="danger" icon="delete" @click.prevent="exclude(board.id)"></vs-button>
-                <vs-button class="ml-5" type="relief" color="primary" icon="edit" @click.prevent="openBoard(board)"></vs-button>
-              </vs-row>
-            </div>
-          </vs-card>
-        </vs-col>
-      </draggable>
-      <vs-prompt
-        @cancel="clearDialog"
-        @accept="chooseAction"
-        :title="!isBoardSelected ? 'New Board' : 'Edit Board'"
-        :is-valid="validField"
-        :accept-text="!isBoardSelected ? $t('create') : $t('edit')"
-        :cancel-text="$t('cancel')"
-        :active.sync="isActive"
-        :color="'success'"
-        class="con-vs-dialog">
-          <div class="con-exemple-prompt">
-          <span v-html="$t('board-dialog')"></span>
-            <vs-input :placeholder="$t('board-name-placeholder')" v-model="title"/>
-            <vs-textarea :label="$t('board-description-placeholder')" v-model="description" />
+  <div class="dashboard">
+    <n-space vertical size="large">
+      <!-- Header -->
+      <n-space align="center" justify="space-between">
+        <n-space align="center">
+          <n-avatar :src="avatarUrl" size="large" />
+          <n-h2>{{ $t('welcome-user') }} {{ username }}</n-h2>
+        </n-space>
+        <n-button type="success" circle @click="showDialog = true">
+          <template #icon>
+            <n-icon><AddIcon /></n-icon>
+          </template>
+        </n-button>
+      </n-space>
 
-            <vs-alert :active="!validField" color="danger" icon="new_releases" >
-              {{$t('dialog-invalid')}}
-            </vs-alert>
-          </div>
-      </vs-prompt>
-    </vs-row>
+      <n-divider>{{ $t('my-board') }}</n-divider>
+
+      <!-- Boards Grid -->
+      <n-grid :cols="4" :x-gap="16" :y-gap="16" responsive="screen">
+        <n-grid-item v-for="board in boards" :key="board.id">
+          <n-card hoverable @click="goToBoard(board)" class="board-card">
+            <template #header>
+              <n-space justify="space-between" align="center">
+                <n-text strong>{{ board.title }}</n-text>
+                <n-button quaternary circle size="small" @click.stop="board.starred = !board.starred">
+                  <template #icon>
+                    <n-icon><StarIcon /></n-icon>
+                  </template>
+                </n-button>
+              </n-space>
+            </template>
+            <n-text>{{ board.description }}</n-text>
+            <template #action>
+              <n-space justify="end">
+                <n-button type="error" quaternary @click.stop="deleteBoard(board.id)">
+                  <template #icon>
+                    <n-icon><DeleteIcon /></n-icon>
+                  </template>
+                </n-button>
+                <n-button type="primary" quaternary @click.stop="openEdit(board)">
+                  <template #icon>
+                    <n-icon><EditIcon /></n-icon>
+                  </template>
+                </n-button>
+              </n-space>
+            </template>
+          </n-card>
+        </n-grid-item>
+      </n-grid>
+    </n-space>
+
+    <!-- Create/Edit Dialog -->
+    <n-modal v-model:show="showDialog" preset="dialog" :title="isEditing ? 'Edit Board' : 'New Board'" :positive-text="$t('create')" :negative-text="$t('cancel')" @positive-click="saveBoard" @negative-click="clearForm">
+      <n-form>
+        <n-form-item :label="$t('board-name-placeholder')">
+          <n-input v-model:value="form.title" placeholder="Board name" />
+        </n-form-item>
+        <n-form-item :label="$t('board-description-placeholder')">
+          <n-input v-model:value="form.description" type="textarea" placeholder="Board description" />
+        </n-form-item>
+      </n-form>
+    </n-modal>
   </div>
 </template>
 
-<script>
-import { mapState, mapActions } from 'vuex'
-import draggable from 'vuedraggable'
-import Logo from '@/assets/logo/personalboard-horiz.png'
+<script setup>
+import { ref, computed, onMounted } from 'vue'
+import { useRouter } from 'vue-router'
+import { useMessage } from 'naive-ui'
+import { storeToRefs } from 'pinia'
+import { useGlobalStore } from '@/store/global'
+import { NSpace, NButton, NIcon, NDivider, NGrid, NGridItem, NCard, NText, NModal, NForm, NFormItem, NInput, NAvatar, NH2, NAvatarGroup } from 'naive-ui'
 
-export default {
-  name: 'Dashboard',
-  components: {
-    draggable
-  },
-  computed: {
-    ...mapState('Global', ['username', 'boards']),
-    validField () {
-      return (this.title.length > 0 && this.description.length > 0)
-    },
-    reactiveBoard: {
-      set (value) {
-        this.tempBoard = [...value]
-        this.saveBoards(this.tempBoard)
-      },
-      get () {
-        return this.tempBoard
-      }
-    }
-  },
-  data: () => ({
-    isActive: false,
-    title: '',
-    description: '',
-    isBoardSelected: false,
-    boardSelected: {},
-    tempBoard: [],
-    Logo: Logo
-  }),
-  mounted () {
-    this.tempBoard = [...this.boards]
-  },
-  methods: {
-    ...mapActions('Global', ['createBoard', 'deleteBoard', 'editBoard', 'saveBoards']),
-    create () {
-      const payload = {
-        title: this.title,
-        description: this.description
-      }
-      this.createBoard(payload)
-    },
-    clearDialog () {
-      this.title = ''
-      this.description = ''
-      this.isBoardSelected = false
-    },
-    openBoard (board) {
-      this.isBoardSelected = true
-      this.boardSelected = { ...board }
-      this.isActive = true
-      this.title = board.title
-      this.description = board.description
-    },
-    edit (board) {
-      const payload = {
-        id: board.id,
-        title: this.title,
-        description: this.description,
-        starred: board.starred,
-        lists: board.lists
-      }
-      this.editBoard(payload)
-    },
-    exclude (id) {
-      const payload = {
-        id: id
-      }
-      this.deleteBoard(payload)
-      this.reactiveBoard = [...this.boards]
-    },
-    goToBoard (board) {
-      this.$router.push({ name: 'board', params: { board: board } })
-    },
-    chooseAction () {
-      if (!this.isBoardSelected) this.create()
-      else this.edit(this.boardSelected)
-      this.$vs.notify({
-        color: 'primary',
-        title: !this.isBoardSelected ? 'New Board Created' : 'Board edited',
-        text: `Board title: ${this.title}`
-      })
-      this.reactiveBoard = [...this.boards]
-      this.clearDialog()
-    }
+const router = useRouter()
+const message = useMessage()
+const globalStore = useGlobalStore()
+const { username, boards } = storeToRefs(globalStore)
+
+const showDialog = ref(false)
+const isEditing = ref(false)
+const editingId = ref(null)
+const form = ref({
+  title: '',
+  description: ''
+})
+
+const avatarUrl = 'https://api.dicebear.com/7.x/avataaars/svg?seed=86345c54239c93f31229c54772935b4d'
+
+const goToBoard = (board) => {
+  globalStore.setBoardSelected(board)
+  router.push({ name: 'board', params: { board } })
+}
+
+const deleteBoard = (id) => {
+  globalStore.deleteBoard({ id })
+  message.success('Board deleted')
+}
+
+const openEdit = (board) => {
+  isEditing.value = true
+  editingId.value = board.id
+  form.value = { title: board.title, description: board.description }
+  showDialog.value = true
+}
+
+const saveBoard = () => {
+  if (!form.value.title || !form.value.description) {
+    message.error('Please fill all fields')
+    return
   }
+
+  if (isEditing.value) {
+    globalStore.editBoard({ id: editingId.value, ...form.value })
+    message.success('Board edited')
+  } else {
+    globalStore.createBoard(form.value)
+    message.success('Board created')
+  }
+  
+  clearForm()
+}
+
+const clearForm = () => {
+  form.value = { title: '', description: '' }
+  isEditing.value = false
+  editingId.value = null
+  showDialog.value = false
 }
 </script>
 
 <style scoped>
-.con-vs-card {
-  margin-right: 10px;
+.dashboard {
+  padding: 20px;
 }
 
-.ml-10 {
-  margin-left: 10px;
+.board-card {
+  cursor: pointer;
+  transition: transform 0.2s;
 }
 
-.ml-5 {
-  margin-left: 5px;
-}
-
-.con-exemple-prompt {
-  padding: 10px;
-  padding-bottom: 0;
-}
-
-.con-exemple-prompt .vs-input {
-  width: 100%;
-  margin-top: 10px;
-}
-
-.vs-con-textarea {
-  width: 100%;
-  margin-top: 10px;
+.board-card:hover {
+  transform: translateY(-4px);
 }
 </style>
