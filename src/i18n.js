@@ -1,7 +1,4 @@
-import Vue from 'vue'
-import VueI18n from 'vue-i18n'
-
-Vue.use(VueI18n)
+import { createI18n } from 'vue-i18n'
 
 // we build a main file with the default locale, the other languages are loaded later
 const defaultLocale = process.env.VUE_APP_I18N_LOCALE || 'en'
@@ -12,15 +9,8 @@ const includedLanguage = require(`./locales/${defaultLocale}.json`)
 // set <html lang="en" />
 document.documentElement.setAttribute('lang', defaultLocale)
 
-export const i18n = new VueI18n({
-  locale: defaultLocale,
-  fallbackLocale: defaultLocale,
-  messages: {
-    [defaultLocale]: includedLanguage
-  }
-})
-
-export default new VueI18n({
+export const i18n = createI18n({
+  legacy: false,
   locale: defaultLocale,
   fallbackLocale: defaultLocale,
   messages: {
@@ -40,8 +30,10 @@ const messages = {
 // will refresh the views with the new language immediately
 export function loadLanguage (lang) {
   return messages[lang]().then((i18nMessages) => {
-    i18n.setLocaleMessage(lang, i18nMessages)
-    i18n.locale = lang
+    i18n.global.setLocaleMessage(lang, i18nMessages.default || i18nMessages)
+    i18n.global.locale.value = lang
     document.documentElement.setAttribute('lang', lang)
   })
 }
+
+export default i18n

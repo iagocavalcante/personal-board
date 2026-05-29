@@ -10,10 +10,18 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { computed } from 'vue'
+import { useGlobalStore } from './stores/global'
+
 export default {
-  computed: {
-    ...mapState('Global', ['appVersion'])
+  name: 'App',
+  setup() {
+    const globalStore = useGlobalStore()
+    const appVersion = computed(() => globalStore.appVersion)
+
+    return {
+      appVersion
+    }
   }
 }
 </script>

@@ -1,34 +1,50 @@
 <template>
-  <vs-row>
-    <vs-col vs-offset="2" vs-type="flex" vs-justify="center" vs-align="center" vs-w="8">
+  <div class="welcome-container">
+    <div class="logo-container">
       <img :src="Logo" alt="Personal Board">
-    </vs-col>
-    <vs-col vs-offset="2" vs-type="flex" vs-justify="center" vs-align="center" vs-w="8">
+    </div>
+    <div class="form-container">
       <div class="box">
         <div>
           <label :for="$t('username-label')">{{ $t("username-label") }}</label>
-          <vs-input color="success" size="large" icon="person" :vs-placeholder="$t('username-placeholder')" v-model="username"/>
-          <vs-button vs-size="large" vs-line-origin="left" type="relief" color="success" @keyup.enter="save()" @click="save()">{{ $t("button-save") }}</vs-button>
+          <input
+            class="input-field"
+            type="text"
+            :placeholder="$t('username-placeholder')"
+            v-model="username"
+            @keyup.enter="save()"
+          />
+          <button class="btn-save" @click="save()">
+            {{ $t("button-save") }}
+          </button>
         </div>
       </div>
-    </vs-col>
-  </vs-row>
+    </div>
+  </div>
 </template>
 
 <script>
+import { ref } from 'vue'
+import { useRouter } from 'vue-router'
+import { useGlobalStore } from '@/stores/global'
 import Logo from '@/assets/logo/personalboard-horiz.png'
-import { mapActions } from 'vuex'
+
 export default {
   name: 'Welcome',
-  data: () => ({
-    username: '',
-    Logo: Logo
-  }),
-  methods: {
-    ...mapActions('Global', ['saveUser']),
-    save () {
-      this.saveUser(this.username)
-      this.$router.push('dashboard')
+  setup() {
+    const router = useRouter()
+    const globalStore = useGlobalStore()
+    const username = ref('')
+
+    const save = () => {
+      globalStore.saveUser(username.value)
+      router.push('dashboard')
+    }
+
+    return {
+      username,
+      Logo,
+      save
     }
   }
 }
@@ -36,8 +52,32 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-.box {
+.welcome-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
 
+.logo-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 20px 0;
+}
+
+.logo-container img {
+  max-width: 80%;
+}
+
+.form-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+.box {
   text-align: center;
   margin-top: 60px;
   display: flex;
@@ -48,15 +88,43 @@ export default {
 .box div {
   vertical-align: middle;
   width: 290px;
-  height: 45px;
 }
 
-.vs-input {
+.input-field {
   margin-top: 20px;
+  width: 100%;
+  padding: 12px;
+  font-size: 16px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  box-sizing: border-box;
 }
 
-.vs-button {
+.input-field:focus {
+  outline: none;
+  border-color: #4caf50;
+}
+
+.btn-save {
   margin-top: 20px;
+  width: 100%;
+  padding: 12px;
+  font-size: 16px;
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
 }
 
+.btn-save:hover {
+  background-color: #45a049;
+}
+
+label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: bold;
+}
 </style>

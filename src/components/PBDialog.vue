@@ -1,85 +1,174 @@
 <template>
-  <vs-prompt
-    @cancel="canceltAlert"
-    @accept="acceptAlert"
-    :title="isBoard ? 'New Board' : 'New Card'"
-    :is-valid="validField"
-    :accept-text="$t('create')"
-    :cancel-text="$t('cancel')"
-    :active.sync="activePrompt"
-    color="danger"
-    class="con-vs-dialog">
-      <div class="con-exemple-prompt">
-      Enter your {{ isBoard ? 'board' : 'card'}} name and {{ isBoard ? 'board' : 'card'}} description to <b>continue</b>.
-        <vs-input :placeholder="placeholderTitle" v-model="title"/>
-        <vs-textarea :label="placeholderText" v-model="description" />
-
-        <vs-alert :active="!validField" color="danger" icon="new_releases" >
-          {{$t('dialog-invalid')}}
-        </vs-alert>
+  <div v-if="isOpen" class="modal-overlay" @click.self="handleCancel">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3>{{ title }}</h3>
+        <button class="close-btn" @click="handleCancel">&times;</button>
       </div>
-    </vs-prompt>
+      <div class="modal-body">
+        <slot></slot>
+        <div v-if="!isValid" class="alert alert-danger">
+          <span class="material-icons">new_releases</span>
+          <span>{{ invalidMessage }}</span>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-cancel" @click="handleCancel">{{ cancelText }}</button>
+        <button class="btn btn-accept" @click="handleAccept" :disabled="!isValid">{{ acceptText }}</button>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex'
 export default {
+  name: 'PBDialog',
   props: {
-    placeholderTitle: {
-      type: String,
-      default: ''
+    isOpen: {
+      type: Boolean,
+      default: false
     },
-    placeholderText: {
+    title: {
       type: String,
-      default: ''
+      default: 'Dialog'
     },
-    isBoard: {
+    acceptText: {
+      type: String,
+      default: 'Accept'
+    },
+    cancelText: {
+      type: String,
+      default: 'Cancel'
+    },
+    isValid: {
       type: Boolean,
       default: true
+    },
+    invalidMessage: {
+      type: String,
+      default: 'Invalid input'
     }
   },
-  data: () => ({
-    title: '',
-    description: ''
-  }),
-  computed: {
-    validField () {
-      return (this.title.length > 0 && this.description.length > 0)
-    },
-    ...mapState('Global', ['activePrompt'])
-  },
+  emits: ['accept', 'cancel', 'update:isOpen'],
   methods: {
-    ...mapActions('Global', ['closeDialog']),
-    acceptAlert () {
-      this.$vs.notify({
-        color: 'success',
-        title: this.title,
-        text: this.description
-      })
+    handleAccept() {
+      if (this.isValid) {
+        this.$emit('accept')
+      }
     },
-    canceltAlert () {
-      this.title = ''
-      this.description = ''
-      this.closeDialog()
+    handleCancel() {
+      this.$emit('cancel')
+      this.$emit('update:isOpen', false)
     }
   }
 }
 </script>
 
-<style>
-.con-exemple-prompt {
-  padding: 10px;
-  padding-bottom: 0;
+<style scoped>
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
 }
 
-.con-exemple-prompt .vs-input {
-  width: 100%;
-  margin-top: 10px;
+.modal-dialog {
+  background: white;
+  border-radius: 8px;
+  min-width: 400px;
+  max-width: 90%;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
-.vs-con-textarea {
-  width: 100%;
-  margin-top: 10px;
+.modal-header {
+  padding: 20px;
+  border-bottom: 1px solid #eee;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
+.modal-header h3 {
+  margin: 0;
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  color: #999;
+}
+
+.close-btn:hover {
+  color: #333;
+}
+
+.modal-body {
+  padding: 20px;
+}
+
+.modal-footer {
+  padding: 20px;
+  border-top: 1px solid #eee;
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.btn {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.btn-cancel {
+  background-color: #f5f5f5;
+  color: #333;
+}
+
+.btn-cancel:hover {
+  background-color: #e0e0e0;
+}
+
+.btn-accept {
+  background-color: #4caf50;
+  color: white;
+}
+
+.btn-accept:hover:not(:disabled) {
+  background-color: #45a049;
+}
+
+.btn-accept:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+.alert {
+  padding: 12px;
+  margin-top: 15px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.alert-danger {
+  background-color: #ffebee;
+  color: #c62828;
+  border: 1px solid #ef5350;
+}
+
+.alert .material-icons {
+  font-size: 20px;
+}
 </style>
